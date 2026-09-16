@@ -18,29 +18,31 @@ import java.sql.Statement;
 @WebServlet("/registrar")
 public class RegistroServlet extends HttpServlet {
 
-    // Código que da Postgres cuando se viola una restricción UNIQUE
     private static final String UNIQUE_VIOLATION = "23505";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        // Si alguien entra directo por la URL, solo mostramos el formulario
         request.getRequestDispatcher("registro.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
 
+        String tipoCuenta = request.getParameter("tipoCuenta");
         String correo = request.getParameter("correo");
         String password = request.getParameter("password");
         String confirmar = request.getParameter("confirmar");
+        String nombreAgencia = request.getParameter("nombreAgencia");
+        String nit = request.getParameter("nit");
 
-        // Validaciones básicas
+        if (tipoCuenta == null || (!tipoCuenta.equals("CLIENTE") && !tipoCuenta.equals("INMOBILIARIA"))) {
+            request.setAttribute("error", "Selecciona un tipo de cuenta válido");
+            request.getRequestDispatcher("registro.jsp").forward(request, response);
+            return;
+        }
+
         if (correo == null || correo.isBlank() || password == null || password.isBlank()) {
             request.setAttribute("error", "Todos los campos son obligatorios");
             request.getRequestDispatcher("registro.jsp").forward(request, response);
@@ -59,6 +61,13 @@ public class RegistroServlet extends HttpServlet {
             return;
         }
 
+        if (tipoCuenta.equals("INMOBILIARIA") &&
+                (nombreAgencia == null || nombreAgencia.isBlank() || nit == null || nit.isBlank())) {
+            request.setAttribute("error", "Para una cuenta inmobiliaria debes indicar el nombre de la agencia y el NIT");
+            request.getRequestDispatcher("registro.jsp").forward(request, response);
+            return;
+        }
+
         String hash = PasswordUtil.hashear(password);
 
         Connection con = null;
@@ -66,11 +75,10 @@ public class RegistroServlet extends HttpServlet {
             con = ConexionBD.obtenerConexion();
             con.setAutoCommit(false);
 
-            // 1. Crear el usuario
             int idUsuario;
             String sqlUsuario = "INSERT INTO usuario (correo, password_hash, estado) VALUES (?, ?, 'ACTIVO')";
             try (PreparedStatement ps = con.prepareStatement(sqlUsuario, Statement.RETURN_GENERATED_KEYS)) {
-                ps.setString(1, correo);
+                ps.setString(1, correo.trim());
                 ps.setString(2, hash);
                 ps.executeUpdate();
 
@@ -80,12 +88,22 @@ public class RegistroServlet extends HttpServlet {
                 }
             }
 
-            // 2. Asignarle el rol CLIENTE por defecto
             String sqlRol = "INSERT INTO usuario_rol (id_usuario, id_rol) " +
-                             "SELECT ?, id_rol FROM rol WHERE nombre_rol = 'CLIENTE'";
+                    "SELECT ?, id_rol FROM rol WHERE nombre_rol = ?";
             try (PreparedStatement ps = con.prepareStatement(sqlRol)) {
                 ps.setInt(1, idUsuario);
+                ps.setString(2, tipoCuenta);
                 ps.executeUpdate();
+            }
+
+            if (tipoCuenta.equals("INMOBILIARIA")) {
+                String sqlInmobiliaria = "INSERT INTO inmobiliaria (id_usuario, nombre_agencia, nit) VALUES (?, ?, ?)";
+                try (PreparedStatement ps = con.prepareStatement(sqlInmobiliaria)) {
+                    ps.setInt(1, idUsuario);
+                    ps.setString(2, nombreAgencia.trim());
+                    ps.setString(3, nit.trim());
+                    ps.executeUpdate();
+                }
             }
 
             con.commit();
@@ -99,7 +117,11 @@ public class RegistroServlet extends HttpServlet {
             }
 
             if (UNIQUE_VIOLATION.equals(e.getSQLState())) {
-                request.setAttribute("error", "El correo ya se encuentra registrado");
+                if (tipoCuenta.equals("INMOBILIARIA")) {
+                    request.setAttribute("error", "El correo o NIT ya se encuentra registrado");
+                } else {
+                    request.setAttribute("error", "El correo ya se encuentra registrado");
+                }
             } else {
                 request.setAttribute("error", "Ocurrió un error al registrar la cuenta");
             }
