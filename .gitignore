@@ -1,0 +1,25 @@
+# Archivos compilados de Java
+*.class
+
+# Configuración sensible - NUNCA subir credenciales reales a GitHub
+WEB-INF/classes/db.properties
+
+# Carpetas de IDE
+.vscode/
+.idea/
+*.iml
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Driver JDBC (es pesado, cada quien lo descarga por su cuenta)
+WEB-INF/lib/*.jar
+!WEB-INF/lib/LEEME.txt
+
+# README no se sube al repo (documentación de trabajo personal)
+README.md
+LEEME_INSTRUCCIONES.txt

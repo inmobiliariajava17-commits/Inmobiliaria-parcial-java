@@ -1,0 +1,22 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="java.util.List" %>
+<%
+    // Datos de sesión disponibles para el menú (puede no haber sesión)
+    Object idUsuarioObj = session.getAttribute("idUsuario");
+    String correoSesion = (String) session.getAttribute("correo");
+    List<String> rolesSesion = (List<String>) session.getAttribute("roles");
+%>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="<%= request.getContextPath() %>/index.jsp">InmoApp</a>
+        <div class="ms-auto">
+            <% if (idUsuarioObj != null) { %>
+                <span class="text-light me-3"><%= correoSesion %> (<%= rolesSesion %>)</span>
+                <a class="btn btn-outline-light btn-sm" href="<%= request.getContextPath() %>/salir">Cerrar sesión</a>
+            <% } else { %>
+                <a class="btn btn-outline-light btn-sm me-2" href="<%= request.getContextPath() %>/login.jsp">Ingresar</a>
+                <a class="btn btn-light btn-sm" href="<%= request.getContextPath() %>/registro.jsp">Registrarse</a>
+            <% } %>
+        </div>
+    </div>
+</nav>
