@@ -1,22 +1,64 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
 <%
-    // Datos de sesión disponibles para el menú (puede no haber sesión)
     Object idUsuarioObj = session.getAttribute("idUsuario");
     String correoSesion = (String) session.getAttribute("correo");
     List<String> rolesSesion = (List<String>) session.getAttribute("roles");
+    String contexto = request.getContextPath();
 %>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="<%= request.getContextPath() %>/index.jsp">InmoApp</a>
-        <div class="ms-auto">
-            <% if (idUsuarioObj != null) { %>
-                <span class="text-light me-3"><%= correoSesion %> (<%= rolesSesion %>)</span>
-                <a class="btn btn-outline-light btn-sm" href="<%= request.getContextPath() %>/salir">Cerrar sesión</a>
-            <% } else { %>
-                <a class="btn btn-outline-light btn-sm me-2" href="<%= request.getContextPath() %>/login.jsp">Ingresar</a>
-                <a class="btn btn-light btn-sm" href="<%= request.getContextPath() %>/registro.jsp">Registrarse</a>
-            <% } %>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400..700,0..1,0" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="<%= contexto %>/css/styles.css">
+
+<header class="app-header sticky-top">
+    <nav class="navbar navbar-expand-lg py-0">
+        <div class="container-fluid app-container header-inner">
+            <a class="brand d-flex align-items-center gap-2 text-decoration-none" href="<%= contexto %>/index.jsp">
+                <span class="brand-mark">IN</span>
+                <span class="brand-copy">
+                    <strong>Inmobiliaria</strong>
+                    <small>Sistema de Gestión</small>
+                </span>
+            </a>
+
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#appNav">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="appNav">
+                <ul class="navbar-nav mx-lg-auto gap-lg-1 mt-3 mt-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="<%= contexto %>/index.jsp">Inicio</a></li>
+                    <% if (idUsuarioObj != null && rolesSesion != null) { %>
+                        <% if (rolesSesion.contains("INMOBILIARIA")) { %>
+                            <li class="nav-item"><a class="nav-link" href="<%= contexto %>/paneles/inmobiliaria.jsp">Panel inmobiliaria</a></li>
+                        <% } %>
+                        <% if (rolesSesion.contains("CLIENTE")) { %>
+                            <li class="nav-item"><a class="nav-link" href="<%= contexto %>/paneles/cliente.jsp">Panel cliente</a></li>
+                        <% } %>
+                        <% if (rolesSesion.contains("ADMINISTRADOR")) { %>
+                            <li class="nav-item"><a class="nav-link" href="<%= contexto %>/paneles/administrador.jsp">Panel administrador</a></li>
+                        <% } %>
+                    <% } %>
+                </ul>
+
+                <div class="header-user mt-3 mt-lg-0">
+                    <% if (idUsuarioObj != null) { %>
+                        <div class="user-data d-none d-sm-block">
+                            <strong><%= correoSesion %></strong>
+                            <span><%= rolesSesion %></span>
+                        </div>
+                        <div class="user-avatar"><span class="material-symbols-outlined">person</span></div>
+                        <a class="logout-link" href="<%= contexto %>/salir" title="Cerrar sesión">
+                            <span class="material-symbols-outlined">logout</span>
+                        </a>
+                    <% } else { %>
+                        <a class="btn btn-sm btn-outline-primary rounded-pill px-3" href="<%= contexto %>/login.jsp">Ingresar</a>
+                        <a class="btn btn-sm btn-primary rounded-pill px-3" href="<%= contexto %>/registro.jsp">Registrarse</a>
+                    <% } %>
+                </div>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+</header>

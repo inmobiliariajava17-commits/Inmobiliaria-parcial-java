@@ -24,6 +24,8 @@ public class RegistroServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         // Si alguien entra directo por la URL, solo mostramos el formulario
         request.getRequestDispatcher("registro.jsp").forward(request, response);
     }
@@ -31,6 +33,8 @@ public class RegistroServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
 
         String correo = request.getParameter("correo");
         String password = request.getParameter("password");

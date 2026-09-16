@@ -25,6 +25,13 @@ public class ControlAccesoFilter implements Filter {
 
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
+
+        // Forzamos UTF-8 para evitar problemas con tildes y caracteres especiales
+        // en todas las páginas y formularios del proyecto.
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
+
         String contexto = request.getContextPath();
 
         HttpSession session = request.getSession(false);
