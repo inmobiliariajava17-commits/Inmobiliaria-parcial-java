@@ -157,3 +157,7 @@ main { min-height: calc(100vh - 132px); }
     .auth-side { min-height: auto; padding: 30px; }
     .auth-form { padding: 30px; }
 }
+
+.catalog-list { display:flex; flex-direction:column; gap:8px; }
+.catalog-row { display:flex; align-items:center; gap:6px; padding:8px 0; border-top:1px solid #edf0f5; }
+.catalog-row .form-control { min-height:36px; }
