@@ -190,17 +190,17 @@ INSERT INTO solicitud (id_propiedad, id_usuario, tipo, estado) VALUES
 -- ============================================================
 -- 14. DOCUMENTO_SOLICITUD (al menos uno por algunas solicitudes)
 -- ============================================================
-INSERT INTO documento_solicitud (id_solicitud, url_documento) VALUES
-(1, 'https://storage.inmoapp.com/docs/sol1_cedula.pdf'),
-(1, 'https://storage.inmoapp.com/docs/sol1_carta_laboral.pdf'),
-(2, 'https://storage.inmoapp.com/docs/sol2_cedula.pdf'),
-(3, 'https://storage.inmoapp.com/docs/sol3_cedula.pdf'),
-(5, 'https://storage.inmoapp.com/docs/sol5_cedula.pdf'),
-(6, 'https://storage.inmoapp.com/docs/sol6_cedula.pdf'),
-(6, 'https://storage.inmoapp.com/docs/sol6_certificado_ingresos.pdf'),
-(8, 'https://storage.inmoapp.com/docs/sol8_cedula.pdf'),
-(9, 'https://storage.inmoapp.com/docs/sol9_cedula.pdf'),
-(10, 'https://storage.inmoapp.com/docs/sol10_cedula.pdf');
+INSERT INTO documento_solicitud (id_solicitud, url_documento, nombre_documento, tipo_documento) VALUES
+(1, 'https://storage.inmoapp.com/docs/sol1_cedula.pdf', 'cedula.pdf', 'DOCUMENTO DE IDENTIDAD'),
+(1, 'https://storage.inmoapp.com/docs/sol1_carta_laboral.pdf', 'carta_laboral.pdf', 'CERTIFICACION LABORAL'),
+(2, 'https://storage.inmoapp.com/docs/sol2_cedula.pdf', 'cedula.pdf', 'DOCUMENTO DE IDENTIDAD'),
+(3, 'https://storage.inmoapp.com/docs/sol3_cedula.pdf', 'cedula.pdf', 'DOCUMENTO DE IDENTIDAD'),
+(5, 'https://storage.inmoapp.com/docs/sol5_cedula.pdf', 'cedula.pdf', 'DOCUMENTO DE IDENTIDAD'),
+(6, 'https://storage.inmoapp.com/docs/sol6_cedula.pdf', 'cedula.pdf', 'DOCUMENTO DE IDENTIDAD'),
+(6, 'https://storage.inmoapp.com/docs/sol6_certificado_ingresos.pdf', 'certificado_ingresos.pdf', 'SOPORTE DE INGRESOS'),
+(8, 'https://storage.inmoapp.com/docs/sol8_cedula.pdf', 'cedula.pdf', 'DOCUMENTO DE IDENTIDAD'),
+(9, 'https://storage.inmoapp.com/docs/sol9_cedula.pdf', 'cedula.pdf', 'DOCUMENTO DE IDENTIDAD'),
+(10, 'https://storage.inmoapp.com/docs/sol10_cedula.pdf', 'cedula.pdf', 'DOCUMENTO DE IDENTIDAD');
 
 -- ============================================================
 -- 15. FAVORITO (N:M, 10 registros)

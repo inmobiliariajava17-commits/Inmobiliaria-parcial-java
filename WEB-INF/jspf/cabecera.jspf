@@ -5,6 +5,7 @@
     String correoSesion = (String) session.getAttribute("correo");
     List<String> rolesSesion = (List<String>) session.getAttribute("roles");
     String contexto = request.getContextPath();
+    String fotoPerfilSesion = (String) session.getAttribute("fotoPerfil");
 %>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,6 +37,7 @@
                         <% } %>
                         <% if (rolesSesion.contains("CLIENTE")) { %>
                             <li class="nav-item"><a class="nav-link" href="<%= contexto %>/paneles/cliente.jsp">Panel cliente</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<%= contexto %>/perfil">Mi perfil</a></li>
                         <% } %>
                         <% if (rolesSesion.contains("ADMINISTRADOR")) { %>
                             <li class="nav-item"><a class="nav-link" href="<%= contexto %>/paneles/administrador.jsp">Panel administrador</a></li>
@@ -49,7 +51,13 @@
                             <strong><%= correoSesion %></strong>
                             <span><%= rolesSesion %></span>
                         </div>
-                        <div class="user-avatar"><span class="material-symbols-outlined">person</span></div>
+                        <div class="user-avatar">
+                            <% if (fotoPerfilSesion != null && !fotoPerfilSesion.trim().isEmpty()) { %>
+                                <img src="<%= fotoPerfilSesion %>" alt="Foto de perfil">
+                            <% } else { %>
+                                <span class="material-symbols-outlined">person</span>
+                            <% } %>
+                        </div>
                         <a class="logout-link" href="<%= contexto %>/salir" title="Cerrar sesión">
                             <span class="material-symbols-outlined">logout</span>
                         </a>

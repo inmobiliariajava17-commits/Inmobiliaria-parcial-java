@@ -126,6 +126,7 @@ CREATE TABLE imagen_propiedad (
     id_imagen    SERIAL PRIMARY KEY,
     id_propiedad INT NOT NULL,
     url_imagen   VARCHAR(255) NOT NULL,
+    es_principal BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT fk_imagen_propiedad FOREIGN KEY (id_propiedad)
         REFERENCES propiedad(id_propiedad) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -176,7 +177,7 @@ CREATE TABLE solicitud (
     id_propiedad INT NOT NULL,
     id_usuario   INT NOT NULL, -- cliente
     tipo         VARCHAR(20) NOT NULL, -- COMPRA / ARRIENDO
-    estado       VARCHAR(20) NOT NULL DEFAULT 'EN_REVISION', -- EN_REVISION / APROBADA / RECHAZADA
+    estado       VARCHAR(20) NOT NULL DEFAULT 'EN_REVISION', -- BORRADOR / EN_REVISION / APROBADA / RECHAZADA
     fecha_solicitud TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_solicitud_propiedad FOREIGN KEY (id_propiedad)
         REFERENCES propiedad(id_propiedad) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -191,6 +192,8 @@ CREATE TABLE documento_solicitud (
     id_documento   SERIAL PRIMARY KEY,
     id_solicitud   INT NOT NULL,
     url_documento  VARCHAR(255) NOT NULL,
+    nombre_documento VARCHAR(255),
+    tipo_documento VARCHAR(80),
     fecha_carga    TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT fk_documento_solicitud FOREIGN KEY (id_solicitud)
         REFERENCES solicitud(id_solicitud) ON DELETE CASCADE ON UPDATE CASCADE

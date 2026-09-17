@@ -18,7 +18,7 @@
 
 <main class="container py-4">
     <div class="mb-4">
-        <a href="<%= request.getContextPath() %>/propiedades" class="text-decoration-none">â† Mis propiedades</a>
+        <a href="<%= request.getContextPath() %>/propiedades" class="text-decoration-none">← Mis propiedades</a>
         <h1 class="page-title mt-2">Registrar Nueva Propiedad</h1>
         <p class="text-secondary">Diligencia los datos bÃ¡sicos del inmueble para publicarlo en el catÃ¡logo.</p>
     </div>
@@ -35,13 +35,13 @@
 
                 <div class="row g-4">
                     <div class="col-md-8">
-                        <label class="form-label fw-semibold">TÃ­tulo de la propiedad *</label>
+                        <label class="form-label fw-semibold">Título de la propiedad *</label>
                         <input type="text" name="titulo" class="form-control" maxlength="150" required
                                placeholder="Ej. Casa moderna en Floridablanca">
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold">MatrÃ­cula inmobiliaria *</label>
+                        <label class="form-label fw-semibold">Matrícula inmobiliaria *</label>
                         <input type="text" name="matricula" class="form-control" maxlength="50" required
                                placeholder="Ej. MI-000011">
                     </div>
@@ -76,7 +76,9 @@
 
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Precio (COP) *</label>
-                        <input type="number" name="precio" class="form-control" min="0" step="0.01" required>
+                        <input type="text" name="precio" id="precio" class="form-control" inputmode="numeric" autocomplete="off" required
+                               placeholder="Ej. 380.000.000">
+                        <div class="form-text">Escribe el valor en pesos. Los puntos se agregan automáticamente.</div>
                     </div>
 
                     <div class="col-md-6">
@@ -89,9 +91,9 @@
                     </div>
 
                     <div class="col-12">
-                        <label class="form-label fw-semibold">DescripciÃ³n</label>
+                        <label class="form-label fw-semibold">Descripción</label>
                         <textarea name="descripcion" class="form-control" rows="5" maxlength="2000"
-                                  placeholder="Describe el inmueble, su ubicaciÃ³n y caracterÃ­sticas principales."></textarea>
+                                  placeholder="Describe el inmueble, su ubicación y características principales."></textarea>
                     </div>
                 </div>
 
@@ -105,5 +107,32 @@
 </main>
 
 <%@ include file="../../WEB-INF/jspf/pie.jspf" %>
+
+<script>
+(function () {
+    const input = document.getElementById('precio');
+    const form = input ? input.closest('form') : null;
+    if (!input || !form) return;
+
+    function formatear(valor) {
+        const digitos = valor.replace(/\D/g, '');
+        if (!digitos) return '';
+        return Number(digitos).toLocaleString('es-CO');
+    }
+
+    input.addEventListener('input', function () {
+        const inicio = this.selectionStart;
+        const antes = this.value.length;
+        this.value = formatear(this.value);
+        const diferencia = this.value.length - antes;
+        const nuevaPos = Math.max(0, (inicio || 0) + diferencia);
+        this.setSelectionRange(nuevaPos, nuevaPos);
+    });
+
+    form.addEventListener('submit', function () {
+        input.value = input.value.replace(/\./g, '').replace(/,/g, '');
+    });
+})();
+</script>
 </body>
 </html>

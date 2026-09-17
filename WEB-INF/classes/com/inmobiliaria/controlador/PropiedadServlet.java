@@ -24,8 +24,8 @@ public class PropiedadServlet extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-        if (session == null || session.getAttribute("idUsuario") == null) {
-            response.sendRedirect(request.getContextPath() + "/ingresar");
+        if (!esInmobiliaria(session)) {
+            response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
             return;
         }
 
@@ -79,8 +79,8 @@ public class PropiedadServlet extends HttpServlet {
 
         HttpSession session = request.getSession(false);
 
-        if (session == null || session.getAttribute("idUsuario") == null) {
-            response.sendRedirect(request.getContextPath() + "/ingresar");
+        if (!esInmobiliaria(session)) {
+            response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
             return;
         }
 
@@ -143,7 +143,7 @@ public class PropiedadServlet extends HttpServlet {
         if (precioMaxTexto != null && !precioMaxTexto.isBlank()) {
             try {
                 sql.append("AND p.precio <= ? ");
-                parametros.add(new java.math.BigDecimal(precioMaxTexto));
+                parametros.add(new java.math.BigDecimal(precioMaxTexto.replace(".", "").replace(",", ".")));
             } catch (NumberFormatException ignored) {
                 request.setAttribute("error", "El precio mÃ¡ximo no es vÃ¡lido");
             }
@@ -217,7 +217,7 @@ public class PropiedadServlet extends HttpServlet {
         }
 
         try {
-            java.math.BigDecimal precio = new java.math.BigDecimal(precioTexto);
+            java.math.BigDecimal precio = new java.math.BigDecimal(precioTexto.replace(".", "").replace(",", "."));
             int idCiudad = Integer.parseInt(idCiudadTexto);
             int idTipo = Integer.parseInt(idTipoTexto);
 
@@ -270,7 +270,7 @@ public class PropiedadServlet extends HttpServlet {
             int idPropiedad = Integer.parseInt(request.getParameter("idPropiedad"));
             int idCiudad = Integer.parseInt(request.getParameter("idCiudad"));
             int idTipo = Integer.parseInt(request.getParameter("idTipo"));
-            java.math.BigDecimal precio = new java.math.BigDecimal(request.getParameter("precio"));
+            java.math.BigDecimal precio = new java.math.BigDecimal(request.getParameter("precio").replace(".", "").replace(",", "."));
 
             String matricula = request.getParameter("matricula");
             String titulo = request.getParameter("titulo");
@@ -445,4 +445,11 @@ public class PropiedadServlet extends HttpServlet {
     private boolean vacio(String valor) {
         return valor == null || valor.isBlank();
     }
+    private boolean esInmobiliaria(HttpSession session) {
+        if (session == null || session.getAttribute("idUsuario") == null) return false;
+        @SuppressWarnings("unchecked")
+        List<String> roles = (List<String>) session.getAttribute("roles");
+        return roles != null && roles.contains("INMOBILIARIA");
+    }
+
 }

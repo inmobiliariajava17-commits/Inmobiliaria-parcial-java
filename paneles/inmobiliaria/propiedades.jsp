@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List, java.util.Map" %>
+<%@ page import="java.text.NumberFormat, java.util.Locale" %>
+<% NumberFormat formatoPrecio = NumberFormat.getNumberInstance(new Locale("es", "CO")); formatoPrecio.setMaximumFractionDigits(0); formatoPrecio.setMinimumFractionDigits(0); %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -100,7 +102,7 @@
 
             <div class="col-md-2">
                 <label class="form-label fw-semibold">Precio máximo</label>
-                <input type="number" name="precioMax" min="0"
+                <input type="text" name="precioMax" id="precioMax" inputmode="numeric" autocomplete="off" placeholder="Ej. 500.000.000"
                        value="<%= request.getParameter("precioMax") == null ? "" : request.getParameter("precioMax") %>"
                        class="form-control" placeholder="Ej. 500000000">
             </div>
@@ -147,13 +149,18 @@
                         </p>
 
                         <div class="fs-5 fw-bold text-primary mb-3">
-                            $ <%= p.get("precio") %>
+                            $ <%= formatoPrecio.format(p.get("precio")) %>
                         </div>
 
                         <div class="d-flex gap-2">
                             <a class="btn btn-outline-primary btn-sm flex-grow-1"
                                href="<%= request.getContextPath() %>/propiedades?accion=editar&id=<%= p.get("id") %>">
                                 Editar
+                            </a>
+
+                            <a class="btn btn-outline-secondary btn-sm"
+                               href="<%= request.getContextPath() %>/imagenes-propiedad?id=<%= p.get("id") %>">
+                                Imágenes y características
                             </a>
 
                             <% if (!"INACTIVA".equals(p.get("estado"))) { %>
@@ -174,5 +181,20 @@
 </main>
 
 <%@ include file="../../WEB-INF/jspf/pie.jspf" %>
+
+<script>
+(function () {
+    const input = document.getElementById('precioMax');
+    const form = document.getElementById('form-filtros-propiedades');
+    if (!input || !form) return;
+    function formatear(valor) {
+        const digitos = valor.replace(/\D/g, '');
+        return digitos ? Number(digitos).toLocaleString('es-CO') : '';
+    }
+    input.value = formatear(input.value);
+    input.addEventListener('input', function () { this.value = formatear(this.value); });
+    form.addEventListener('submit', function () { input.value = input.value.replace(/\./g, '').replace(/,/g, ''); });
+})();
+</script>
 </body>
 </html>

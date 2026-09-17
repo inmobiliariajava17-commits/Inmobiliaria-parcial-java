@@ -109,7 +109,7 @@ public class AdministradorPropiedadServlet extends HttpServlet {
                 "p.descripcion, p.precio, p.estado, p.fecha_publicacion, " +
                 "c.nombre_ciudad, t.nombre_tipo, i.nombre_agencia, " +
                 "COALESCE((SELECT ip.url_imagen FROM imagen_propiedad ip " +
-                "WHERE ip.id_propiedad = p.id_propiedad ORDER BY ip.id_imagen LIMIT 1), '') AS imagen " +
+                "WHERE ip.id_propiedad = p.id_propiedad ORDER BY ip.es_principal DESC, ip.id_imagen LIMIT 1), '') AS imagen " +
                 "FROM propiedad p " +
                 "INNER JOIN inmobiliaria i ON i.id_inmobiliaria = p.id_inmobiliaria " +
                 "INNER JOIN ciudad c ON c.id_ciudad = p.id_ciudad " +

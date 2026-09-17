@@ -92,6 +92,7 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("idUsuario", idUsuario);
             session.setAttribute("correo", correo);
             session.setAttribute("roles", roles);
+            session.setAttribute("fotoPerfil", obtenerFotoPerfil(idUsuario));
 
             // Definimos a qué panel lo mandamos según su rol principal
             String destino;
@@ -109,5 +110,21 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute("error", "Ocurrió un error al iniciar sesión");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
+    }
+
+    private String obtenerFotoPerfil(int idUsuario) {
+        String sql = "SELECT foto_url FROM perfil WHERE id_usuario = ?";
+        try (Connection con = ConexionBD.obtenerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idUsuario);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("foto_url");
+                }
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+        return null;
     }
 }

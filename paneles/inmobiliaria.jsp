@@ -26,8 +26,8 @@
         <div class="row g-3 mb-4">
             <div class="col-6 col-lg-3"><div class="kpi-card"><div class="kpi-label">Propiedades</div><div class="kpi-value">—</div><div class="kpi-note">Consulta tu cartera</div></div></div>
             <div class="col-6 col-lg-3"><div class="kpi-card"><div class="kpi-label">Disponibles</div><div class="kpi-value">—</div><div class="kpi-note">Estado del catálogo</div></div></div>
-            <div class="col-6 col-lg-3"><div class="kpi-card"><div class="kpi-label">Citas</div><div class="kpi-value">—</div><div class="kpi-note">Módulo de Sprint 3</div></div></div>
-            <div class="col-6 col-lg-3"><div class="kpi-card"><div class="kpi-label">Solicitudes</div><div class="kpi-value">—</div><div class="kpi-note">Módulo de Sprint 3</div></div></div>
+            <div class="col-6 col-lg-3"><div class="kpi-card"><div class="kpi-label">Citas</div><div class="kpi-value">✓</div><div class="kpi-note">Gestión disponible</div></div></div>
+            <div class="col-6 col-lg-3"><div class="kpi-card"><div class="kpi-label">Solicitudes</div><div class="kpi-value">✓</div><div class="kpi-note">Gestión disponible</div></div></div>
         </div>
 
         <div class="quick-actions mb-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
@@ -51,8 +51,11 @@
                 <div class="dashboard-card dashboard-card-disabled">
                     <div class="dashboard-icon"><span class="material-symbols-outlined">calendar_month</span></div>
                     <h2>Citas y solicitudes</h2>
-                    <p>Estos módulos forman parte del núcleo operativo previsto para el Sprint 3 y todavía no se activan para no alterar las funciones actuales.</p>
-                    <span class="badge text-bg-light border">Próximamente</span>
+                    <p>Gestiona las visitas y revisa los trámites enviados por los clientes.</p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="<%= request.getContextPath() %>/citas-inmobiliaria" class="btn btn-primary btn-sm">Gestionar citas</a>
+                        <a href="<%= request.getContextPath() %>/solicitudes-inmobiliaria" class="btn btn-outline-primary btn-sm">Gestionar solicitudes</a>
+                    </div>
                 </div>
             </div>
         </div>

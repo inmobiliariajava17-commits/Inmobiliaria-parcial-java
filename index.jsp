@@ -1,7 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ page import="java.text.NumberFormat, java.util.Locale" %>
 <%
     response.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
+    NumberFormat formatoPrecio = NumberFormat.getNumberInstance(new Locale("es", "CO"));
+    formatoPrecio.setMaximumFractionDigits(0);
+    formatoPrecio.setMinimumFractionDigits(0);
 %>
 <%@ page import="com.inmobiliaria.util.ConexionBD" %>
 <%@ page import="java.sql.Connection" %>
@@ -93,7 +97,12 @@
             <%
                 try (Connection con = ConexionBD.obtenerConexion();
                      PreparedStatement ps = con.prepareStatement(
-                         "SELECT p.titulo, p.descripcion, p.precio, c.nombre_ciudad, tp.nombre_tipo " +
+                         "SELECT p.id_propiedad, p.titulo, p.descripcion, p.precio, c.nombre_ciudad, tp.nombre_tipo, " +
+                         "COALESCE((SELECT ip.url_imagen FROM imagen_propiedad ip " +
+                         "WHERE ip.id_propiedad = p.id_propiedad AND ip.es_principal = TRUE " +
+                         "ORDER BY ip.id_imagen LIMIT 1), " +
+                         "(SELECT ip.url_imagen FROM imagen_propiedad ip " +
+                         "WHERE ip.id_propiedad = p.id_propiedad ORDER BY ip.id_imagen LIMIT 1), '') AS imagen " +
                          "FROM propiedad p " +
                          "INNER JOIN ciudad c ON p.id_ciudad = c.id_ciudad " +
                          "INNER JOIN tipo_propiedad tp ON p.id_tipo = tp.id_tipo " +
@@ -104,7 +113,13 @@
             %>
                 <div class="col-md-6 col-xl-4">
                     <article class="property-card">
-                        <div class="property-image"><span class="material-symbols-outlined">apartment</span></div>
+                        <div class="property-image">
+                            <% if (rs.getString("imagen") != null && !rs.getString("imagen").isBlank()) { %>
+                                <img src="<%= rs.getString("imagen") %>" alt="Imagen de <%= rs.getString("titulo") %>" class="w-100 h-100 object-fit-cover">
+                            <% } else { %>
+                                <span class="material-symbols-outlined">apartment</span>
+                            <% } %>
+                        </div>
                         <div class="property-body">
                             <div class="property-card-top">
                                 <span class="property-type"><%= rs.getString("nombre_tipo") %></span>
@@ -112,10 +127,10 @@
                             </div>
                             <h3 class="property-title"><%= rs.getString("titulo") %></h3>
                             <p class="property-description"><%= rs.getString("descripcion") == null ? "Sin descripción." : rs.getString("descripcion") %></p>
-                            <div class="property-price">$<%= String.format("%,.0f", rs.getBigDecimal("precio")) %></div>
+                            <div class="property-price">$<%= formatoPrecio.format(rs.getBigDecimal("precio")) %></div>
                             <div class="property-meta">
                                 <span><span class="material-symbols-outlined" style="font-size:15px">location_on</span> <%= rs.getString("nombre_ciudad") %></span>
-                                <strong>Ver catálogo</strong>
+                                <a href="<%= request.getContextPath() %>/propiedad?id=<%= rs.getInt("id_propiedad") %>" class="text-decoration-none fw-semibold">Ver detalle</a>
                             </div>
                         </div>
                     </article>

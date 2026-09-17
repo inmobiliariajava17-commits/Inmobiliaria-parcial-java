@@ -31,7 +31,9 @@ public class BuscarServlet extends HttpServlet {
 
         StringBuilder sql = new StringBuilder(
             "SELECT p.id_propiedad, p.titulo, p.precio, p.estado, " +
-            "c.nombre_ciudad, tp.nombre_tipo " +
+            "c.nombre_ciudad, tp.nombre_tipo, " +
+            "COALESCE((SELECT ip.url_imagen FROM imagen_propiedad ip " +
+            "WHERE ip.id_propiedad = p.id_propiedad ORDER BY ip.es_principal DESC, ip.id_imagen LIMIT 1), '') AS imagen " +
             "FROM propiedad p " +
             "INNER JOIN ciudad c ON p.id_ciudad = c.id_ciudad " +
             "INNER JOIN tipo_propiedad tp ON p.id_tipo = tp.id_tipo " +
@@ -67,6 +69,7 @@ public class BuscarServlet extends HttpServlet {
                     fila.put("precio", rs.getBigDecimal("precio"));
                     fila.put("ciudad", rs.getString("nombre_ciudad"));
                     fila.put("tipo", rs.getString("nombre_tipo"));
+                    fila.put("imagen", rs.getString("imagen"));
                     resultados.add(fila);
                 }
             }

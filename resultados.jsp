@@ -1,7 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ page import="java.text.NumberFormat, java.util.Locale" %>
 <%
     response.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
+    NumberFormat formatoPrecio = NumberFormat.getNumberInstance(new Locale("es", "CO"));
+    formatoPrecio.setMaximumFractionDigits(0);
+    formatoPrecio.setMinimumFractionDigits(0);
 %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
@@ -51,7 +55,13 @@
                 <% for (Map<String, Object> propiedad : resultados) { %>
                     <div class="col-md-6 col-xl-4">
                         <article class="property-card">
-                            <div class="property-image"><span class="material-symbols-outlined">home_work</span></div>
+                            <div class="property-image">
+                                <% if (propiedad.get("imagen") != null && !propiedad.get("imagen").toString().isBlank()) { %>
+                                    <img src="<%= propiedad.get("imagen") %>" alt="Imagen de <%= propiedad.get("titulo") %>" class="w-100 h-100 object-fit-cover">
+                                <% } else { %>
+                                    <span class="material-symbols-outlined">home_work</span>
+                                <% } %>
+                            </div>
                             <div class="property-body">
                                 <div class="property-card-top">
                                     <span class="property-type"><%= propiedad.get("tipo") %></span>
@@ -59,8 +69,8 @@
                                 </div>
                                 <h2 class="property-title"><%= propiedad.get("titulo") %></h2>
                                 <p class="property-description mb-2">Propiedad ubicada en <%= propiedad.get("ciudad") %>.</p>
-                                <div class="property-price">$<%= propiedad.get("precio") %></div>
-                                <div class="property-meta"><span>Disponible en catálogo</span><strong><%= propiedad.get("ciudad") %></strong></div>
+                                <div class="property-price">$<%= formatoPrecio.format(propiedad.get("precio")) %></div>
+                                <div class="property-meta"><span><%= propiedad.get("ciudad") %></span><a href="<%= request.getContextPath() %>/propiedad?id=<%= propiedad.get("id") %>" class="text-decoration-none fw-semibold">Ver detalle</a></div>
                             </div>
                         </article>
                     </div>

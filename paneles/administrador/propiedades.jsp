@@ -1,9 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="java.text.NumberFormat, java.util.Locale" %>
 <%
     response.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
+    NumberFormat formatoPrecio = NumberFormat.getNumberInstance(new Locale("es", "CO"));
+    formatoPrecio.setMaximumFractionDigits(0);
+    formatoPrecio.setMinimumFractionDigits(0);
     List<Map<String, Object>> propiedades = (List<Map<String, Object>>) request.getAttribute("propiedades");
     List<String[]> ciudades = (List<String[]>) request.getAttribute("ciudades");
     List<String[]> tipos = (List<String[]>) request.getAttribute("tipos");
@@ -104,7 +108,7 @@
                                 <td><strong><%= p.get("titulo") %></strong><br><small class="text-muted"><%= p.get("tipo") %></small></td>
                                 <td><%= p.get("agencia") %></td>
                                 <td><%= p.get("ciudad") %></td>
-                                <td>$ <%= p.get("precio") %></td>
+                                <td>$ <%= formatoPrecio.format(p.get("precio")) %></td>
                                 <td><span class="badge text-bg-light border"><%= p.get("estado") %></span></td>
                                 <td>
                                     <form method="post" action="<%= request.getContextPath() %>/administrador/propiedades" class="d-flex gap-1">
