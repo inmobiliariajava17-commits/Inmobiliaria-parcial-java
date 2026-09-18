@@ -1,6 +1,14 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ include file="../../WEB-INF/jspf/seguridad.jspf" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
+<%
+    if (!tieneRol(session, "ADMINISTRADOR")) {
+        response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
+        return;
+    }
+%>
+
 <%
     response.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
@@ -11,7 +19,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Auditoría</title>
+    <title>Auditor&#237;a</title>
 </head>
 <body>
 <%@ include file="../../WEB-INF/jspf/cabecera.jspf" %>
@@ -19,16 +27,16 @@
     <div class="container app-container">
         <div class="page-header d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3">
             <div>
-                <div class="eyebrow">Administración</div>
-                <h1 class="page-title">Auditoría</h1>
-                <p class="page-subtitle">Consulta las últimas acciones registradas en el sistema.</p>
+                <div class="eyebrow">Administraci&#243;n</div>
+                <h1 class="page-title">Auditor&#237;a</h1>
+                <p class="page-subtitle">Consulta las &#250;ltimas acciones registradas en el sistema.</p>
             </div>
             <a href="<%= request.getContextPath() %>/paneles/administrador.jsp" class="btn btn-outline-primary btn-sm rounded-pill">Volver al panel</a>
         </div>
 
         <div class="info-panel mb-4">
             <h2 class="h6 fw-bold">Registro de actividad</h2>
-            <p class="mb-0">Se muestran las últimas 100 acciones. El usuario se obtiene mediante la relación con la tabla de auditoría.</p>
+            <p class="mb-0">Se muestran las &#250;ltimas 100 acciones. El usuario se obtiene mediante la relaci&#243;n con la tabla de auditor&#237;a.</p>
         </div>
 
         <div class="table-card">
@@ -38,13 +46,13 @@
                     <tr>
                         <th>ID</th>
                         <th>Usuario</th>
-                        <th>Acción</th>
+                        <th>Acci&#243;n</th>
                         <th>Fecha</th>
                     </tr>
                     </thead>
                     <tbody>
                     <% if (registros == null || registros.isEmpty()) { %>
-                        <tr><td colspan="4" class="text-center py-4">No hay registros de auditoría.</td></tr>
+                        <tr><td colspan="4" class="text-center py-4">No hay registros de auditor&#237;a.</td></tr>
                     <% } else { %>
                         <% for (Map<String, Object> registro : registros) { %>
                             <tr>

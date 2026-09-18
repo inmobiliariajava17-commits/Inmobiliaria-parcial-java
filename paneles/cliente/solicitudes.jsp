@@ -1,7 +1,15 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ include file="../../WEB-INF/jspf/seguridad.jspf" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.text.NumberFormat, java.util.Locale" %>
+<%
+    if (!tieneRol(session, "CLIENTE")) {
+        response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
+        return;
+    }
+%>
+
 <%
     response.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
@@ -25,13 +33,13 @@
             <div>
                 <div class="eyebrow">Espacio del cliente</div>
                 <h1 class="page-title">Mis solicitudes</h1>
-                <p class="page-subtitle">Consulta tus solicitudes y continúa las que todavía están en borrador.</p>
+                <p class="page-subtitle">Consulta tus solicitudes y contin&#250;a las que todav&#237;a est&#225;n en borrador.</p>
             </div>
             <a href="<%= request.getContextPath() %>/paneles/cliente.jsp" class="btn btn-outline-primary align-self-start">Volver al panel</a>
         </div>
 
         <% if ("creada".equals(request.getParameter("mensaje"))) { %>
-            <div class="alert alert-success">La solicitud fue registrada correctamente y quedó en revisión.</div>
+            <div class="alert alert-success">La solicitud fue registrada correctamente y qued&#243; en revisi&#243;n.</div>
         <% } else if ("existente".equals(request.getParameter("error"))) { %>
             <div class="alert alert-warning">Ya tienes una solicitud activa para esta propiedad.</div>
         <% } else if (request.getAttribute("error") != null || "guardar".equals(request.getParameter("error"))) { %>
@@ -41,9 +49,9 @@
         <% if (solicitudes == null || solicitudes.isEmpty()) { %>
             <div class="empty-state surface-card">
                 <span class="material-symbols-outlined">description</span>
-                <h2 class="h5 fw-bold mt-2">Todavía no tienes solicitudes</h2>
-                <p class="text-muted mb-3">Cuando quieras iniciar un trámite de compra o arriendo, puedes hacerlo desde el detalle de una propiedad.</p>
-                <a href="<%= request.getContextPath() %>/buscar" class="btn btn-primary">Explorar propiedades</a>
+                <h2 class="h5 fw-bold mt-2">Todav&#237;a no tienes solicitudes</h2>
+                <p class="text-muted mb-3">Cuando quieras iniciar un tr&#225;mite de compra o arriendo, puedes hacerlo desde el detalle de una propiedad.</p>
+                <a href="<%= request.getContextPath() %>/acciones/buscar.jsp" class="btn btn-primary">Explorar propiedades</a>
             </div>
         <% } else { %>
             <div class="row g-4">
@@ -55,12 +63,12 @@
                                 <span class="badge text-bg-light border"><%= solicitud.get("estado") %></span>
                             </div>
                             <h2 class="h5 fw-bold"><%= solicitud.get("titulo") %></h2>
-                            <p class="text-muted mb-2"><%= solicitud.get("ciudad") %> · <%= solicitud.get("tipo") %></p>
+                            <p class="text-muted mb-2"><%= solicitud.get("ciudad") %> &#183; <%= solicitud.get("tipo") %></p>
                             <div class="property-price mb-3">$<%= formatoPrecio.format(solicitud.get("precio")) %></div>
-                            <p class="small text-muted">Solicitud #<%= solicitud.get("id") %> · <%= solicitud.get("fecha") %></p>
+                            <p class="small text-muted">Solicitud #<%= solicitud.get("id") %> &#183; <%= solicitud.get("fecha") %></p>
                             <div class="mt-auto d-grid gap-2">
-                                <a href="<%= request.getContextPath() %>/propiedad?id=<%= solicitud.get("idPropiedad") %>" class="btn btn-outline-primary">Ver propiedad</a>
-                                <a href="<%= request.getContextPath() %>/documentos-solicitud?idSolicitud=<%= solicitud.get("id") %>" class="btn btn-primary"><%= "BORRADOR".equals(solicitud.get("estado")) ? "Continuar solicitud" : "Gestionar documentos" %></a>
+                                <a href="<%= request.getContextPath() %>/acciones/detalle-propiedad.jsp?id=<%= solicitud.get("idPropiedad") %>" class="btn btn-outline-primary">Ver propiedad</a>
+                                <a href="<%= request.getContextPath() %>/acciones/documentos-solicitud.jsp?idSolicitud=<%= solicitud.get("id") %>" class="btn btn-primary"><%= "BORRADOR".equals(solicitud.get("estado")) ? "Continuar solicitud" : "Gestionar documentos" %></a>
                             </div>
                         </div>
                     </div>

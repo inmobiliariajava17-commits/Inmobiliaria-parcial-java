@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%
     response.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
@@ -17,7 +17,7 @@
         <span class="material-symbols-outlined text-danger" style="font-size:52px">lock</span>
         <div class="eyebrow mt-3">Control de acceso</div>
         <h1 class="page-title">Acceso denegado</h1>
-        <p class="page-subtitle mb-4">No tienes el rol necesario para acceder a esta sección.</p>
+        <p class="page-subtitle mb-4">No tienes el rol necesario para acceder a esta secci&#243;n.</p>
         <a href="<%= request.getContextPath() %>/index.jsp" class="btn btn-primary">Volver al inicio</a>
     </div>
 </main>

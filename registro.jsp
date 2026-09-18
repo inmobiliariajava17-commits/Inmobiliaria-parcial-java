@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -18,7 +18,7 @@
         <div class="alert alert-danger"><%= request.getAttribute("error") %></div>
     <% } %>
 
-    <form method="post" action="<%= request.getContextPath() %>/registrar">
+    <form method="post" action="<%= request.getContextPath() %>/acciones/registrar.jsp">
         <div class="mb-3">
             <label class="form-label">Tipo de cuenta</label>
             <select name="tipoCuenta" id="tipoCuenta" class="form-select" required onchange="mostrarDatosInmobiliaria()">
@@ -28,17 +28,17 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Correo electrónico</label>
+            <label class="form-label">Correo electr&#243;nico</label>
             <input type="email" name="correo" class="form-control" required>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Contraseña</label>
+            <label class="form-label">Contrase&#241;a</label>
             <input type="password" name="password" class="form-control" required minlength="6">
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Confirmar contraseña</label>
+            <label class="form-label">Confirmar contrase&#241;a</label>
             <input type="password" name="confirmar" class="form-control" required minlength="6">
         </div>
 
@@ -60,7 +60,7 @@
         <button type="submit" class="btn btn-primary w-100">Registrarme</button>
     </form>
 
-    <p class="mt-3">¿Ya tienes cuenta? <a href="login.jsp">Inicia sesión</a></p>
+    <p class="mt-3">&#191;Ya tienes cuenta? <a href="login.jsp">Inicia sesi&#243;n</a></p>
 </div>
 
 <script>

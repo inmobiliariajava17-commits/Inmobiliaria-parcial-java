@@ -1,6 +1,14 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ include file="../../WEB-INF/jspf/seguridad.jspf" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
+<%
+    if (!tieneRol(session, "ADMINISTRADOR")) {
+        response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
+        return;
+    }
+%>
+
 <%
     response.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
@@ -26,9 +34,9 @@
     <div class="container app-container">
         <div class="page-header d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3">
             <div>
-                <div class="eyebrow">Administración</div>
+                <div class="eyebrow">Administraci&#243;n</div>
                 <h1 class="page-title">Reportes</h1>
-                <p class="page-subtitle">Resumen de la información registrada en el sistema.</p>
+                <p class="page-subtitle">Resumen de la informaci&#243;n registrada en el sistema.</p>
             </div>
             <a href="<%= request.getContextPath() %>/paneles/administrador.jsp"
                class="btn btn-outline-primary btn-sm rounded-pill">Volver al panel</a>
@@ -70,7 +78,7 @@
                 <div class="table-card h-100">
                     <div class="p-4">
                         <h2 class="h5 fw-bold mb-1">Citas por estado</h2>
-                        <p class="text-muted small mb-0">Cantidad de citas según su estado.</p>
+                        <p class="text-muted small mb-0">Cantidad de citas seg&#250;n su estado.</p>
                     </div>
                     <div class="table-responsive">
                         <table class="table align-middle mb-0">

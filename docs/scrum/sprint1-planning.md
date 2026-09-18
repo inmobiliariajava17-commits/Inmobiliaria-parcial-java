@@ -20,7 +20,7 @@ conexión funcionando, la landing page y el login/registro con roles.
 - Conexión JDBC centralizada
 - Landing page
 - Registro y login
-- Filter para controlar acceso según el rol
+- JSPF de seguridad para controlar acceso según el rol
 
 ## Definition of Done
 

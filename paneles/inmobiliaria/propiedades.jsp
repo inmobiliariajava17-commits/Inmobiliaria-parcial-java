@@ -1,6 +1,14 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="../../WEB-INF/jspf/seguridad.jspf" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="java.util.List, java.util.Map" %>
 <%@ page import="java.text.NumberFormat, java.util.Locale" %>
+<%
+    if (!tieneRol(session, "INMOBILIARIA")) {
+        response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
+        return;
+    }
+%>
+
 <% NumberFormat formatoPrecio = NumberFormat.getNumberInstance(new Locale("es", "CO")); formatoPrecio.setMaximumFractionDigits(0); formatoPrecio.setMinimumFractionDigits(0); %>
 <!DOCTYPE html>
 <html lang="es">
@@ -27,11 +35,11 @@
 <main class="container py-4">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
-            <div class="text-secondary small fw-semibold text-uppercase">Gestión inmobiliaria</div>
+            <div class="text-secondary small fw-semibold text-uppercase">Gesti&#243;n inmobiliaria</div>
             <h1 class="page-title mb-1">Mis Propiedades</h1>
             <p class="text-secondary mb-0">Administra los inmuebles registrados por tu inmobiliaria.</p>
         </div>
-        <a href="<%= request.getContextPath() %>/propiedades?accion=nueva" class="btn btn-primary">
+        <a href="<%= request.getContextPath() %>/acciones/propiedades.jsp?accion=nueva" class="btn btn-primary">
             + Registrar propiedad
         </a>
     </div>
@@ -52,7 +60,7 @@
         <div class="alert alert-danger"><%= request.getAttribute("error") %></div>
     <% } %>
 
-    <form method="get" action="<%= request.getContextPath() %>/propiedades"
+    <form method="get" action="<%= request.getContextPath() %>/acciones/propiedades.jsp"
           class="card property-card p-3 mb-4">
         <div class="row g-3 align-items-end">
             <div class="col-md-3">
@@ -101,7 +109,7 @@
             </div>
 
             <div class="col-md-2">
-                <label class="form-label fw-semibold">Precio máximo</label>
+                <label class="form-label fw-semibold">Precio m&#225;ximo</label>
                 <input type="text" name="precioMax" id="precioMax" inputmode="numeric" autocomplete="off" placeholder="Ej. 500.000.000"
                        value="<%= request.getParameter("precioMax") == null ? "" : request.getParameter("precioMax") %>"
                        class="form-control" placeholder="Ej. 500000000">
@@ -134,12 +142,12 @@
                 <div class="card property-card h-100">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
-                            <span class="text-secondary small"><%= p.get("ciudad") %> · <%= p.get("tipo") %></span>
+                            <span class="text-secondary small"><%= p.get("ciudad") %> &#183; <%= p.get("tipo") %></span>
                             <span class="status status-<%= estado %>"><%= p.get("estado") %></span>
                         </div>
 
                         <div class="text-secondary small mb-2">
-                            Matrícula: <%= p.get("matricula") %>
+                            Matr&#237;cula: <%= p.get("matricula") %>
                         </div>
 
                         <h4 class="h5 fw-bold"><%= p.get("titulo") %></h4>
@@ -154,18 +162,18 @@
 
                         <div class="d-flex gap-2">
                             <a class="btn btn-outline-primary btn-sm flex-grow-1"
-                               href="<%= request.getContextPath() %>/propiedades?accion=editar&id=<%= p.get("id") %>">
+                               href="<%= request.getContextPath() %>/acciones/propiedades.jsp?accion=editar&id=<%= p.get("id") %>">
                                 Editar
                             </a>
 
                             <a class="btn btn-outline-secondary btn-sm"
-                               href="<%= request.getContextPath() %>/imagenes-propiedad?id=<%= p.get("id") %>">
-                                Imágenes y características
+                               href="<%= request.getContextPath() %>/acciones/imagenes-propiedad.jsp?id=<%= p.get("id") %>">
+                                Im&#225;genes y caracter&#237;sticas
                             </a>
 
                             <% if (!"INACTIVA".equals(p.get("estado"))) { %>
-                            <form method="post" action="<%= request.getContextPath() %>/propiedades"
-                                  onsubmit="return confirm('¿Dar de baja esta propiedad?');">
+                            <form method="post" action="<%= request.getContextPath() %>/acciones/propiedades.jsp"
+                                  onsubmit="return confirm('&#191;Dar de baja esta propiedad?');">
                                 <input type="hidden" name="accion" value="eliminar">
                                 <input type="hidden" name="idPropiedad" value="<%= p.get("id") %>">
                                 <button class="btn btn-outline-danger btn-sm">Dar de baja</button>

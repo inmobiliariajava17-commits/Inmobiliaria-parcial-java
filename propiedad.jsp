@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.time.LocalDate" %>
@@ -31,9 +31,9 @@
                 <div>
                     <div class="eyebrow">Detalle de propiedad</div>
                     <h1 class="page-title"><%= propiedad.get("titulo") %></h1>
-                    <p class="page-subtitle"><%= propiedad.get("tipo") %> · <%= propiedad.get("ciudad") %> · Publicada por <%= propiedad.get("agencia") %></p>
+                    <p class="page-subtitle"><%= propiedad.get("tipo") %> &#183; <%= propiedad.get("ciudad") %> &#183; Publicada por <%= propiedad.get("agencia") %></p>
                 </div>
-                <a href="<%= request.getContextPath() %>/buscar" class="btn btn-outline-primary align-self-start">Volver al catálogo</a>
+                <a href="<%= request.getContextPath() %>/acciones/buscar.jsp" class="btn btn-outline-primary align-self-start">Volver al cat&#225;logo</a>
             </div>
 
             <% if ("agregado".equals(request.getParameter("favorito"))) { %>
@@ -56,7 +56,7 @@
                         <% } else { %>
                             <div class="property-detail-placeholder">
                                 <span class="material-symbols-outlined">home_work</span>
-                                <span>Esta propiedad todavía no tiene imágenes registradas.</span>
+                                <span>Esta propiedad todav&#237;a no tiene im&#225;genes registradas.</span>
                             </div>
                         <% } %>
                     </div>
@@ -75,7 +75,7 @@
                             <div><span>Ciudad</span><strong><%= propiedad.get("ciudad") %></strong></div>
                             <div><span>Tipo</span><strong><%= propiedad.get("tipo") %></strong></div>
                             <div><span>Inmobiliaria</span><strong><%= propiedad.get("agencia") %></strong></div>
-                            <div><span>Matrícula</span><strong><%= propiedad.get("matricula") %></strong></div>
+                            <div><span>Matr&#237;cula</span><strong><%= propiedad.get("matricula") %></strong></div>
                         </div>
 
                         <div class="d-grid gap-2 mt-4">
@@ -91,7 +91,7 @@
                                 }
                             %>
                             <% if (esCliente) { %>
-                                <form method="post" action="<%= request.getContextPath() %>/favoritos">
+                                <form method="post" action="<%= request.getContextPath() %>/acciones/favoritos.jsp">
                                     <input type="hidden" name="idPropiedad" value="<%= propiedad.get("id") %>">
                                     <input type="hidden" name="accion" value="<%= esFavorito ? "quitar" : "agregar" %>">
                                     <button type="submit" class="btn <%= esFavorito ? "btn-outline-danger" : "btn-primary" %> w-100">
@@ -99,7 +99,7 @@
                                         <%= esFavorito ? "Quitar de favoritos" : "Agregar a favoritos" %>
                                     </button>
                                 </form>
-                                <a href="<%= request.getContextPath() %>/propiedad?id=<%= propiedad.get("id") %>&nueva=<%= propiedad.get("id") %>" class="btn btn-primary">Agendar visita</a>
+                                <a href="<%= request.getContextPath() %>/acciones/detalle-propiedad.jsp?id=<%= propiedad.get("id") %>&nueva=<%= propiedad.get("id") %>" class="btn btn-primary">Agendar visita</a>
                                 <a href="#solicitud" id="btnIniciarSolicitud" class="btn btn-outline-primary">Iniciar solicitud</a>
                                 <a href="<%= request.getContextPath() %>/paneles/cliente.jsp" class="btn btn-outline-primary">Ir a mi panel</a>
                             <% } else if (session.getAttribute("idUsuario") != null) { %>
@@ -114,29 +114,29 @@
             </div>
 
             <% if ("tipo".equals(request.getParameter("solicitud"))) { %>
-                <div class="alert alert-danger">Selecciona un tipo de solicitud válido: compra o arriendo.</div>
+                <div class="alert alert-danger">Selecciona un tipo de solicitud v&#225;lido: compra o arriendo.</div>
             <% } else if ("existente".equals(request.getParameter("solicitud"))) { %>
                 <div class="alert alert-warning">Ya tienes una solicitud activa para esta propiedad.</div>
             <% } else if ("no-disponible".equals(request.getParameter("solicitud"))) { %>
-                <div class="alert alert-danger">Esta propiedad ya no está disponible para iniciar una solicitud.</div>
+                <div class="alert alert-danger">Esta propiedad ya no est&#225; disponible para iniciar una solicitud.</div>
             <% } %>
 
             <% if ("fecha".equals(request.getParameter("cita"))) { %>
-                <div class="alert alert-danger">La fecha y hora seleccionadas no son válidas.</div>
+                <div class="alert alert-danger">La fecha y hora seleccionadas no son v&#225;lidas.</div>
             <% } else if ("pasada".equals(request.getParameter("cita"))) { %>
                 <div class="alert alert-danger">La visita debe programarse para una fecha y hora futuras.</div>
             <% } else if ("horario".equals(request.getParameter("cita"))) { %>
                 <div class="alert alert-danger">Selecciona uno de los horarios disponibles, cada 45 minutos entre las 8:00 a. m. y las 5:45 p. m.</div>
             <% } else if ("no-disponible".equals(request.getParameter("cita"))) { %>
-                <div class="alert alert-danger">Esta propiedad ya no está disponible para agendar visitas.</div>
+                <div class="alert alert-danger">Esta propiedad ya no est&#225; disponible para agendar visitas.</div>
             <% } %>
 
             <% if (esCliente) { %>
                 <% String estadoSolicitud = request.getParameter("solicitud"); %>
                 <div class="surface-card mt-4<%= (estadoSolicitud == null ? " d-none" : "") %>" id="solicitud">
-                    <div class="eyebrow">Trámite de propiedad</div>
+                    <div class="eyebrow">Tr&#225;mite de propiedad</div>
                     <h2 class="h5 fw-bold mb-2">Iniciar solicitud</h2>
-                    <p class="text-muted">Selecciona el tipo de trámite y guarda primero los documentos requeridos. Después podrás revisar la documentación y enviar la solicitud.</p>
+                    <p class="text-muted">Selecciona el tipo de tr&#225;mite y guarda primero los documentos requeridos. Despu&#233;s podr&#225;s revisar la documentaci&#243;n y enviar la solicitud.</p>
 
                     <% if ("documentos".equals(request.getParameter("solicitud"))) { %>
                         <div class="alert alert-warning">Debes adjuntar al menos un documento para enviar la solicitud.</div>
@@ -144,14 +144,14 @@
                         <div class="alert alert-danger">Solo se permiten documentos PDF, JPG, JPEG o PNG.</div>
                     <% } %>
 
-                    <form method="post" action="<%= request.getContextPath() %>/solicitudes" enctype="multipart/form-data" class="row g-3">
+                    <form method="post" action="<%= request.getContextPath() %>/acciones/solicitudes.jsp" enctype="multipart/form-data" class="row g-3">
                         <input type="hidden" name="accion" value="guardarDocumentos">
                         <input type="hidden" name="idPropiedad" value="<%= propiedad.get("id") %>">
 
                         <div class="col-md-4">
                             <label for="tipoSolicitud" class="form-label">Tipo de solicitud</label>
                             <select id="tipoSolicitud" name="tipo" class="form-select" required>
-                                <option value="">Selecciona una opción</option>
+                                <option value="">Selecciona una opci&#243;n</option>
                                 <option value="COMPRA">Compra</option>
                                 <option value="ARRIENDO">Arriendo</option>
                             </select>
@@ -160,7 +160,7 @@
                         <div class="col-12">
                             <div class="p-3 rounded border bg-light">
                                 <strong>Documentos requeridos</strong>
-                                <p class="small text-muted mb-2">Estos son los documentos solicitados para este trámite dentro de la aplicación. La inmobiliaria puede pedir documentación adicional durante la revisión.</p>
+                                <p class="small text-muted mb-2">Estos son los documentos solicitados para este tr&#225;mite dentro de la aplicaci&#243;n. La inmobiliaria puede pedir documentaci&#243;n adicional durante la revisi&#243;n.</p>
                                 <ul id="listaRequisitosSolicitud" class="small mb-0">
                                     <li>Selecciona primero si la solicitud es de compra o arriendo.</li>
                                 </ul>
@@ -178,7 +178,7 @@
                         </div>
 
                         <div class="col-md-4" id="campoCompra">
-                            <label for="certificacionLaboral" class="form-label">Certificación laboral <span class="text-danger">*</span></label>
+                            <label for="certificacionLaboral" class="form-label">Certificaci&#243;n laboral <span class="text-danger">*</span></label>
                             <input type="file" id="certificacionLaboral" name="certificacionLaboral" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
                         </div>
 
@@ -188,7 +188,7 @@
                         </div>
 
                         <div class="col-12">
-                            <small class="text-muted">Formatos permitidos: PDF, JPG, JPEG y PNG. Máximo 5 MB por archivo.</small>
+                            <small class="text-muted">Formatos permitidos: PDF, JPG, JPEG y PNG. M&#225;ximo 5 MB por archivo.</small>
                         </div>
 
                         <div class="col-12 d-flex justify-content-end">
@@ -203,7 +203,7 @@
                     <div class="eyebrow">Nueva visita</div>
                     <h2 class="h5 fw-bold mb-2">Agendar visita</h2>
                     <p class="text-muted">Selecciona una fecha y hora futura para solicitar la visita.</p>
-                    <form method="post" action="<%= request.getContextPath() %>/citas" class="row g-3">
+                    <form method="post" action="<%= request.getContextPath() %>/acciones/citas.jsp" class="row g-3">
                         <input type="hidden" name="accion" value="agendar">
                         <input type="hidden" name="idPropiedad" value="<%= propiedad.get("id") %>">
                         <div class="col-md-4">
@@ -255,7 +255,7 @@ document.addEventListener("DOMContentLoaded", function () {
             listaRequisitos.innerHTML =
                 "<li>Documento de identidad</li>" +
                 "<li>Soporte de ingresos</li>" +
-                "<li>Certificación laboral</li>";
+                "<li>Certificaci&#243;n laboral</li>";
             campoCompra.classList.remove("d-none");
             campoArriendo.classList.add("d-none");
             certificacionLaboral.required = true;
@@ -313,7 +313,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const idPropiedad = "<%= propiedad.get("id") %>";
-        const url = "<%= request.getContextPath() %>/propiedad?accion=horarios&idPropiedad=" +
+        const url = "<%= request.getContextPath() %>/acciones/detalle-propiedad.jsp?accion=horarios&idPropiedad=" +
                     encodeURIComponent(idPropiedad) + "&fecha=" + encodeURIComponent(fecha.value);
 
         fetch(url)
@@ -360,7 +360,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="row g-4 mt-1">
                 <div class="col-lg-8">
                     <div class="surface-card">
-                        <div class="eyebrow">Características</div>
+                        <div class="eyebrow">Caracter&#237;sticas</div>
                         <h2 class="h5 fw-bold mb-3">Lo que ofrece esta propiedad</h2>
                         <% if (caracteristicas != null && !caracteristicas.isEmpty()) { %>
                             <div class="d-flex flex-wrap gap-2">
@@ -375,14 +375,14 @@ document.addEventListener("DOMContentLoaded", function () {
                                 <% } %>
                             </div>
                         <% } else { %>
-                            <p class="text-muted mb-0">No hay características registradas para esta propiedad.</p>
+                            <p class="text-muted mb-0">No hay caracter&#237;sticas registradas para esta propiedad.</p>
                         <% } %>
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="info-panel h-100">
-                        <h2>¿Te interesa?</h2>
-                        <p>Si quieres visitar esta propiedad o iniciar una solicitud, entra a tu panel de cliente. Estas acciones se habilitarán desde allí.</p>
+                        <h2>&#191;Te interesa?</h2>
+                        <p>Si quieres visitar esta propiedad o iniciar una solicitud, entra a tu panel de cliente. Estas acciones se habilitar&#225;n desde all&#237;.</p>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,43 @@
+<%@ page import="java.util.List" %>
+<%@ page import="javax.servlet.http.HttpSession" %>
+<%!
+private boolean tieneRol(HttpSession sesion, String rol) {
+    if (sesion == null || sesion.getAttribute("idUsuario") == null) {
+        return false;
+    }
+
+    Object rolesObj = sesion.getAttribute("roles");
+    if (!(rolesObj instanceof List)) {
+        return false;
+    }
+
+    return ((List<?>) rolesObj).contains(rol);
+}
+
+private boolean esAdministrador(HttpSession sesion) {
+    return tieneRol(sesion, "ADMINISTRADOR");
+}
+
+private boolean esInmobiliaria(HttpSession sesion) {
+    return tieneRol(sesion, "INMOBILIARIA");
+}
+
+private boolean esCliente(HttpSession sesion) {
+    return tieneRol(sesion, "CLIENTE");
+}
+
+private int obtenerIdUsuario(HttpSession sesion) {
+    if (sesion == null || sesion.getAttribute("idUsuario") == null) {
+        return -1;
+    }
+    Object valor = sesion.getAttribute("idUsuario");
+    if (valor instanceof Number) {
+        return ((Number) valor).intValue();
+    }
+    try {
+        return Integer.parseInt(valor.toString());
+    } catch (Exception e) {
+        return -1;
+    }
+}
+%>

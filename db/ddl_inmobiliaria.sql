@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 -- ============================================================
 -- PROYECTO: Sistema Web Inmobiliaria
 -- Script DDL - PostgreSQL (Supabase)

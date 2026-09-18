@@ -1,0 +1,39 @@
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.DriverManager" %>
+<%@ page import="java.io.InputStream" %>
+<%@ page import="java.io.IOException" %>
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="java.util.Properties" %>
+<%!
+private Connection obtenerConexion() throws SQLException {
+    Properties propiedades = new Properties();
+
+    try (InputStream entrada = getClass().getClassLoader().getResourceAsStream("db.properties")) {
+        if (entrada == null) {
+            throw new SQLException("No se encontró db.properties");
+        }
+        try {
+            propiedades.load(entrada);
+        } catch (IOException e) {
+            throw new SQLException("No se pudo leer db.properties", e);
+        }
+    } catch (IOException e) {
+        throw new SQLException("No se pudo cerrar la configuración de la base de datos", e);
+    }
+
+    String url = propiedades.getProperty("db.url");
+    String usuario = propiedades.getProperty("db.user");
+    String password = propiedades.getProperty("db.password");
+
+    if (url == null || usuario == null || password == null) {
+        throw new SQLException("La configuración de la base de datos está incompleta");
+    }
+
+    try {
+        Class.forName("org.postgresql.Driver");
+        return DriverManager.getConnection(url, usuario, password);
+    } catch (ClassNotFoundException e) {
+        throw new SQLException("No se encontró el driver de PostgreSQL", e);
+    }
+}
+%>

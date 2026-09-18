@@ -1,5 +1,13 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
+<%@ include file="../../WEB-INF/jspf/seguridad.jspf" %>
+<%
+    if (!tieneRol(session, "INMOBILIARIA")) {
+        response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
+        return;
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -18,9 +26,9 @@
 
 <main class="container py-4">
     <div class="mb-4">
-        <a href="<%= request.getContextPath() %>/propiedades" class="text-decoration-none">← Mis propiedades</a>
+        <a href="<%= request.getContextPath() %>/acciones/propiedades.jsp" class="text-decoration-none">&#8592; Mis propiedades</a>
         <h1 class="page-title mt-2">Registrar Nueva Propiedad</h1>
-        <p class="text-secondary">Diligencia los datos bÃ¡sicos del inmueble para publicarlo en el catÃ¡logo.</p>
+        <p class="text-secondary">Diligencia los datos b&#225;sicos del inmueble para publicarlo en el cat&#225;logo.</p>
     </div>
 
     <% if (request.getAttribute("error") != null) { %>
@@ -29,19 +37,19 @@
 
     <div class="card form-card">
         <div class="card-body p-4 p-md-5">
-            <form method="post" action="<%= request.getContextPath() %>/propiedades">
+            <form method="post" action="<%= request.getContextPath() %>/acciones/propiedades.jsp">
 
                 <input type="hidden" name="accion" value="crear">
 
                 <div class="row g-4">
                     <div class="col-md-8">
-                        <label class="form-label fw-semibold">Título de la propiedad *</label>
+                        <label class="form-label fw-semibold">T&#237;tulo de la propiedad *</label>
                         <input type="text" name="titulo" class="form-control" maxlength="150" required
                                placeholder="Ej. Casa moderna en Floridablanca">
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold">Matrícula inmobiliaria *</label>
+                        <label class="form-label fw-semibold">Matr&#237;cula inmobiliaria *</label>
                         <input type="text" name="matricula" class="form-control" maxlength="50" required
                                placeholder="Ej. MI-000011">
                     </div>
@@ -78,7 +86,7 @@
                         <label class="form-label fw-semibold">Precio (COP) *</label>
                         <input type="text" name="precio" id="precio" class="form-control" inputmode="numeric" autocomplete="off" required
                                placeholder="Ej. 380.000.000">
-                        <div class="form-text">Escribe el valor en pesos. Los puntos se agregan automáticamente.</div>
+                        <div class="form-text">Escribe el valor en pesos. Los puntos se agregan autom&#225;ticamente.</div>
                     </div>
 
                     <div class="col-md-6">
@@ -91,14 +99,14 @@
                     </div>
 
                     <div class="col-12">
-                        <label class="form-label fw-semibold">Descripción</label>
+                        <label class="form-label fw-semibold">Descripci&#243;n</label>
                         <textarea name="descripcion" class="form-control" rows="5" maxlength="2000"
-                                  placeholder="Describe el inmueble, su ubicación y características principales."></textarea>
+                                  placeholder="Describe el inmueble, su ubicaci&#243;n y caracter&#237;sticas principales."></textarea>
                     </div>
                 </div>
 
                 <div class="d-flex flex-column flex-sm-row justify-content-end gap-2 mt-4">
-                    <a href="<%= request.getContextPath() %>/propiedades" class="btn btn-outline-secondary">Cancelar</a>
+                    <a href="<%= request.getContextPath() %>/acciones/propiedades.jsp" class="btn btn-outline-secondary">Cancelar</a>
                     <button type="submit" class="btn btn-primary">Guardar propiedad</button>
                 </div>
             </form>

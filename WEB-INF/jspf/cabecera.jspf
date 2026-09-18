@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
 <%
     Object idUsuarioObj = session.getAttribute("idUsuario");
@@ -6,6 +6,18 @@
     List<String> rolesSesion = (List<String>) session.getAttribute("roles");
     String contexto = request.getContextPath();
     String fotoPerfilSesion = (String) session.getAttribute("fotoPerfil");
+    String etiquetaCuenta = "Cuenta";
+    if (rolesSesion != null) {
+        if (rolesSesion.contains("ADMINISTRADOR")) {
+            etiquetaCuenta = "Administración";
+        } else if (rolesSesion.contains("INMOBILIARIA") && rolesSesion.contains("CLIENTE")) {
+            etiquetaCuenta = "Cuenta con acceso múltiple";
+        } else if (rolesSesion.contains("INMOBILIARIA")) {
+            etiquetaCuenta = "Cuenta inmobiliaria";
+        } else if (rolesSesion.contains("CLIENTE")) {
+            etiquetaCuenta = "Cuenta de cliente";
+        }
+    }
 %>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +32,7 @@
                 <span class="brand-mark">IN</span>
                 <span class="brand-copy">
                     <strong>Inmobiliaria</strong>
-                    <small>Sistema de Gestión</small>
+                    <small>Soluciones inmobiliarias</small>
                 </span>
             </a>
 
@@ -37,7 +49,7 @@
                         <% } %>
                         <% if (rolesSesion.contains("CLIENTE")) { %>
                             <li class="nav-item"><a class="nav-link" href="<%= contexto %>/paneles/cliente.jsp">Panel cliente</a></li>
-                            <li class="nav-item"><a class="nav-link" href="<%= contexto %>/perfil">Mi perfil</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<%= contexto %>/acciones/perfil.jsp">Mi perfil</a></li>
                         <% } %>
                         <% if (rolesSesion.contains("ADMINISTRADOR")) { %>
                             <li class="nav-item"><a class="nav-link" href="<%= contexto %>/paneles/administrador.jsp">Panel administrador</a></li>
@@ -49,7 +61,7 @@
                     <% if (idUsuarioObj != null) { %>
                         <div class="user-data d-none d-sm-block">
                             <strong><%= correoSesion %></strong>
-                            <span><%= rolesSesion %></span>
+                            <span><%= etiquetaCuenta %></span>
                         </div>
                         <div class="user-avatar">
                             <% if (fotoPerfilSesion != null && !fotoPerfilSesion.trim().isEmpty()) { %>
@@ -58,7 +70,7 @@
                                 <span class="material-symbols-outlined">person</span>
                             <% } %>
                         </div>
-                        <a class="logout-link" href="<%= contexto %>/salir" title="Cerrar sesión">
+                        <a class="logout-link" href="<%= contexto %>/acciones/salir.jsp" title="Cerrar sesi&#243;n">
                             <span class="material-symbols-outlined">logout</span>
                         </a>
                     <% } else { %>

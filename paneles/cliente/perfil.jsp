@@ -1,5 +1,13 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ include file="../../WEB-INF/jspf/seguridad.jspf" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.util.Map" %>
+<%
+    if (!tieneRol(session, "CLIENTE")) {
+        response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
+        return;
+    }
+%>
+
 <%
     response.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
@@ -44,7 +52,7 @@
             <div>
                 <div class="eyebrow">Cuenta del cliente</div>
                 <h1 class="page-title">Mi perfil</h1>
-                <p class="page-subtitle">Completa tus datos y revisa cómo quedará tu información.</p>
+                <p class="page-subtitle">Completa tus datos y revisa c&#243;mo quedar&#225; tu informaci&#243;n.</p>
             </div>
             <a href="<%= request.getContextPath() %>/paneles/cliente.jsp" class="btn btn-outline-secondary">Volver al panel</a>
         </div>
@@ -58,12 +66,12 @@
 
         <div class="perfil-grid">
             <div class="surface-card perfil-card">
-                <h2 class="section-title mb-3">Así se verá tu perfil</h2>
+                <h2 class="section-title mb-3">As&#237; se ver&#225; tu perfil</h2>
 
                 <% if (tieneFoto) { %>
                     <img id="fotoVista" class="foto-perfil" src="<%= valorFoto %>" alt="Foto de perfil">
                 <% } else { %>
-                    <div id="fotoPlaceholder" class="foto-placeholder">👤</div>
+                    <div id="fotoPlaceholder" class="foto-placeholder">&#128100;</div>
                     <img id="fotoVista" class="foto-perfil" src="" alt="Foto de perfil" style="display:none;">
                 <% } %>
 
@@ -71,11 +79,11 @@
                 <p id="documentoVista" class="text-muted mb-3"><%= valorDocumento.isEmpty() ? "Documento pendiente" : "Documento: " + valorDocumento %></p>
 
                 <div class="dato-perfil">
-                    <div class="dato-label">Teléfono</div>
+                    <div class="dato-label">Tel&#233;fono</div>
                     <div id="telefonoVista" class="dato-valor"><%= valorTelefono.isEmpty() ? "No registrado" : valorTelefono %></div>
                 </div>
                 <div class="dato-perfil">
-                    <div class="dato-label">Dirección</div>
+                    <div class="dato-label">Direcci&#243;n</div>
                     <div id="direccionVista" class="dato-valor"><%= valorDireccion.isEmpty() ? "No registrada" : valorDireccion %></div>
                 </div>
             </div>
@@ -86,7 +94,7 @@
                     <p class="text-muted mb-0">Los campos marcados con * son obligatorios.</p>
                 </div>
 
-                <form method="post" action="<%= request.getContextPath() %>/perfil" enctype="multipart/form-data">
+                <form method="post" action="<%= request.getContextPath() %>/acciones/perfil.jsp" enctype="multipart/form-data">
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label" for="nombres">Nombres *</label>
@@ -101,17 +109,17 @@
                             <input class="form-control" type="text" id="documento" name="documento" maxlength="30" required value="<%= valorDocumento %>">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label" for="telefono">Teléfono</label>
+                            <label class="form-label" for="telefono">Tel&#233;fono</label>
                             <input class="form-control" type="text" id="telefono" name="telefono" maxlength="20" value="<%= valorTelefono %>">
                         </div>
                         <div class="col-12">
-                            <label class="form-label" for="direccion">Dirección</label>
+                            <label class="form-label" for="direccion">Direcci&#243;n</label>
                             <input class="form-control" type="text" id="direccion" name="direccion" maxlength="200" value="<%= valorDireccion %>">
                         </div>
                         <div class="col-12">
                             <label class="form-label" for="foto">Foto de perfil</label>
                             <input class="form-control" type="file" id="foto" name="foto" accept="image/jpeg,image/png,image/gif,image/webp">
-                            <div class="form-text">Selecciona una imagen desde tu computador. Máximo 2 MB.</div>
+                            <div class="form-text">Selecciona una imagen desde tu computador. M&#225;ximo 2 MB.</div>
                             <% if (tieneFoto) { %>
                                 <div class="form-check mt-2">
                                     <input class="form-check-input" type="checkbox" id="eliminarFoto" name="eliminarFoto" value="1">

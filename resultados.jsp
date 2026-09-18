@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.text.NumberFormat, java.util.Locale" %>
 <%
     response.setCharacterEncoding("UTF-8");
@@ -22,18 +22,18 @@
     <div class="container app-container">
         <div class="page-header d-flex flex-column flex-md-row justify-content-between gap-3">
             <div>
-                <div class="eyebrow">Catálogo público</div>
-                <h1 class="page-title">Resultados de búsqueda</h1>
+                <div class="eyebrow">Cat&#225;logo p&#250;blico</div>
+                <h1 class="page-title">Resultados de b&#250;squeda</h1>
                 <p class="page-subtitle">
                     <% if (request.getAttribute("ciudadBuscada") != null && !((String) request.getAttribute("ciudadBuscada")).isBlank()) { %>
                         Ciudad: <strong><%= request.getAttribute("ciudadBuscada") %></strong>
                     <% } %>
                     <% if (request.getAttribute("tipoBuscado") != null && !((String) request.getAttribute("tipoBuscado")).isBlank()) { %>
-                        &nbsp;•&nbsp; Tipo: <strong><%= request.getAttribute("tipoBuscado") %></strong>
+                        &nbsp;&#8226;&nbsp; Tipo: <strong><%= request.getAttribute("tipoBuscado") %></strong>
                     <% } %>
                 </p>
             </div>
-            <a href="<%= request.getContextPath() %>/index.jsp" class="btn btn-outline-primary align-self-start">Nueva búsqueda</a>
+            <a href="<%= request.getContextPath() %>/index.jsp" class="btn btn-outline-primary align-self-start">Nueva b&#250;squeda</a>
         </div>
 
         <% if (request.getAttribute("error") != null) { %>
@@ -48,7 +48,7 @@
             <div class="empty-panel">
                 <span class="material-symbols-outlined">search_off</span>
                 <h2 class="h5 fw-bold">No encontramos propiedades</h2>
-                <p class="text-muted mb-0">Prueba con otros filtros para ampliar la búsqueda.</p>
+                <p class="text-muted mb-0">Prueba con otros filtros para ampliar la b&#250;squeda.</p>
             </div>
         <% } else { %>
             <div class="row g-4">
@@ -70,7 +70,7 @@
                                 <h2 class="property-title"><%= propiedad.get("titulo") %></h2>
                                 <p class="property-description mb-2">Propiedad ubicada en <%= propiedad.get("ciudad") %>.</p>
                                 <div class="property-price">$<%= formatoPrecio.format(propiedad.get("precio")) %></div>
-                                <div class="property-meta"><span><%= propiedad.get("ciudad") %></span><a href="<%= request.getContextPath() %>/propiedad?id=<%= propiedad.get("id") %>" class="text-decoration-none fw-semibold">Ver detalle</a></div>
+                                <div class="property-meta"><span><%= propiedad.get("ciudad") %></span><a href="<%= request.getContextPath() %>/acciones/detalle-propiedad.jsp?id=<%= propiedad.get("id") %>" class="text-decoration-none fw-semibold">Ver detalle</a></div>
                             </div>
                         </article>
                     </div>

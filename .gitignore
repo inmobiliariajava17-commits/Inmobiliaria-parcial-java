@@ -26,13 +26,8 @@ LEEME_INSTRUCCIONES.txt
 
 # Archivos subidos por usuarios
 uploads/propiedades/*
-!uploads/propiedades/.gitkeep
-
-# Archivos subidos por usuarios
-uploads/propiedades/*
 uploads/solicitudes/*
 uploads/perfiles/*
-
 !uploads/propiedades/.gitkeep
 !uploads/solicitudes/.gitkeep
 !uploads/perfiles/.gitkeep

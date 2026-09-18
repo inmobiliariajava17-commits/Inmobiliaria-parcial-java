@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ include file="/WEB-INF/jspf/conexion.jspf" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.text.NumberFormat, java.util.Locale" %>
 <%
     response.setCharacterEncoding("UTF-8");
@@ -7,7 +8,6 @@
     formatoPrecio.setMaximumFractionDigits(0);
     formatoPrecio.setMinimumFractionDigits(0);
 %>
-<%@ page import="com.inmobiliaria.util.ConexionBD" %>
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.sql.ResultSet" %>
@@ -23,9 +23,9 @@
 
 <section class="hero">
     <div class="container app-container text-center hero-content">
-        <div class="eyebrow text-white-50">Sistema de gestión inmobiliaria</div>
+        <div class="eyebrow text-white-50">Encuentra tu pr&#243;ximo espacio</div>
         <h1>Encuentra una propiedad que se adapte a ti</h1>
-        <p>Consulta casas, apartamentos, locales y oficinas publicadas en nuestro catálogo.</p>
+        <p>Consulta casas, apartamentos, locales y oficinas publicadas en nuestro cat&#225;logo.</p>
     </div>
 </section>
 
@@ -35,17 +35,17 @@
             <div class="d-flex align-items-center gap-2 mb-3">
                 <span class="material-symbols-outlined text-primary">search</span>
                 <div>
-                    <strong class="d-block">Búsqueda rápida</strong>
-                    <small class="text-muted">Filtra el catálogo por ciudad y tipo de propiedad.</small>
+                    <strong class="d-block">B&#250;squeda r&#225;pida</strong>
+                    <small class="text-muted">Filtra el cat&#225;logo por ciudad y tipo de propiedad.</small>
                 </div>
             </div>
-            <form method="get" action="<%= request.getContextPath() %>/buscar" class="row g-3 align-items-end">
+            <form method="get" action="<%= request.getContextPath() %>/acciones/buscar.jsp" class="row g-3 align-items-end">
                 <div class="col-md-5">
                     <label class="form-label">Ciudad</label>
                     <select name="ciudad" class="form-select">
                         <option value="">Todas las ciudades</option>
                         <%
-                            try (Connection con = ConexionBD.obtenerConexion();
+                            try (Connection con = obtenerConexion();
                                  PreparedStatement ps = con.prepareStatement("SELECT nombre_ciudad FROM ciudad ORDER BY nombre_ciudad");
                                  ResultSet rs = ps.executeQuery()) {
                                 while (rs.next()) {
@@ -64,7 +64,7 @@
                     <select name="tipo" class="form-select">
                         <option value="">Todos los tipos</option>
                         <%
-                            try (Connection con = ConexionBD.obtenerConexion();
+                            try (Connection con = obtenerConexion();
                                  PreparedStatement ps = con.prepareStatement("SELECT nombre_tipo FROM tipo_propiedad ORDER BY nombre_tipo");
                                  ResultSet rs = ps.executeQuery()) {
                                 while (rs.next()) {
@@ -89,13 +89,13 @@
 <section class="section">
     <div class="container app-container">
         <div class="mb-4">
-            <div class="eyebrow">Catálogo</div>
+            <div class="eyebrow">Cat&#225;logo</div>
             <h2 class="section-title">Propiedades destacadas</h2>
             <p class="section-text">Algunas de las propiedades disponibles actualmente.</p>
         </div>
         <div class="row g-4">
             <%
-                try (Connection con = ConexionBD.obtenerConexion();
+                try (Connection con = obtenerConexion();
                      PreparedStatement ps = con.prepareStatement(
                          "SELECT p.id_propiedad, p.titulo, p.descripcion, p.precio, c.nombre_ciudad, tp.nombre_tipo, " +
                          "COALESCE((SELECT ip.url_imagen FROM imagen_propiedad ip " +
@@ -130,7 +130,7 @@
                             <div class="property-price">$<%= formatoPrecio.format(rs.getBigDecimal("precio")) %></div>
                             <div class="property-meta">
                                 <span><span class="material-symbols-outlined" style="font-size:15px">location_on</span> <%= rs.getString("nombre_ciudad") %></span>
-                                <a href="<%= request.getContextPath() %>/propiedad?id=<%= rs.getInt("id_propiedad") %>" class="text-decoration-none fw-semibold">Ver detalle</a>
+                                <a href="<%= request.getContextPath() %>/acciones/detalle-propiedad.jsp?id=<%= rs.getInt("id_propiedad") %>" class="text-decoration-none fw-semibold">Ver detalle</a>
                             </div>
                         </div>
                     </article>

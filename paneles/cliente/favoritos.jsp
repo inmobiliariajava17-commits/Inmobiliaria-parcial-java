@@ -1,6 +1,14 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ include file="../../WEB-INF/jspf/seguridad.jspf" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.util.List, java.util.Map" %>
 <%@ page import="java.text.NumberFormat, java.util.Locale" %>
+<%
+    if (!tieneRol(session, "CLIENTE")) {
+        response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
+        return;
+    }
+%>
+
 <%
     response.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
@@ -24,7 +32,7 @@
             <div>
                 <div class="eyebrow">Espacio del cliente</div>
                 <h1 class="page-title">Mis favoritos</h1>
-                <p class="page-subtitle">Aquí tienes las propiedades que guardaste para revisarlas después.</p>
+                <p class="page-subtitle">Aqu&#237; tienes las propiedades que guardaste para revisarlas despu&#233;s.</p>
             </div>
             <a href="<%= request.getContextPath() %>/index.jsp" class="btn btn-outline-primary align-self-start">Buscar propiedades</a>
         </div>
@@ -33,14 +41,14 @@
             <div class="alert alert-success">Propiedad retirada de favoritos.</div>
         <% } %>
         <% if (request.getParameter("error") != null || request.getAttribute("error") != null) { %>
-            <div class="alert alert-danger">No se pudo completar la operación.</div>
+            <div class="alert alert-danger">No se pudo completar la operaci&#243;n.</div>
         <% } %>
 
         <% if (favoritos == null || favoritos.isEmpty()) { %>
             <div class="empty-panel surface-card">
                 <span class="material-symbols-outlined">favorite_border</span>
-                <h2 class="h5 fw-bold">Todavía no tienes favoritos</h2>
-                <p class="text-muted mb-3">Guarda una propiedad desde su detalle para encontrarla rápidamente aquí.</p>
+                <h2 class="h5 fw-bold">Todav&#237;a no tienes favoritos</h2>
+                <p class="text-muted mb-3">Guarda una propiedad desde su detalle para encontrarla r&#225;pidamente aqu&#237;.</p>
                 <a href="<%= request.getContextPath() %>/index.jsp" class="btn btn-primary">Explorar propiedades</a>
             </div>
         <% } else { %>
@@ -66,8 +74,8 @@
                                 <p class="property-description">Propiedad ubicada en <%= propiedad.get("ciudad") %>.</p>
                                 <div class="property-price">$<%= formatoPrecio.format(propiedad.get("precio")) %></div>
                                 <div class="d-flex gap-2 mt-3">
-                                    <a href="<%= request.getContextPath() %>/propiedad?id=<%= propiedad.get("id") %>" class="btn btn-outline-primary btn-sm flex-grow-1">Ver detalle</a>
-                                    <form method="post" action="<%= request.getContextPath() %>/favoritos">
+                                    <a href="<%= request.getContextPath() %>/acciones/detalle-propiedad.jsp?id=<%= propiedad.get("id") %>" class="btn btn-outline-primary btn-sm flex-grow-1">Ver detalle</a>
+                                    <form method="post" action="<%= request.getContextPath() %>/acciones/favoritos.jsp">
                                         <input type="hidden" name="accion" value="quitar">
                                         <input type="hidden" name="idPropiedad" value="<%= propiedad.get("id") %>">
                                         <input type="hidden" name="volver" value="lista">

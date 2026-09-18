@@ -1,5 +1,13 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ include file="../../WEB-INF/jspf/seguridad.jspf" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.util.List, java.util.Map, java.sql.Timestamp" %>
+<%
+    if (!tieneRol(session, "CLIENTE")) {
+        response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
+        return;
+    }
+%>
+
 <%
     response.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
@@ -30,14 +38,14 @@
         <% } else if ("cancelada".equals(request.getParameter("mensaje"))) { %>
             <div class="alert alert-success">La cita fue cancelada.</div>
         <% } else if (request.getParameter("error") != null || request.getAttribute("error") != null) { %>
-            <div class="alert alert-danger">No se pudo completar la operación.</div>
+            <div class="alert alert-danger">No se pudo completar la operaci&#243;n.</div>
         <% } %>
 
         <% if (citas == null || citas.isEmpty()) { %>
             <div class="empty-panel surface-card">
                 <span class="material-symbols-outlined">calendar_month</span>
-                <h2 class="h5 fw-bold">Todavía no tienes citas</h2>
-                <p class="text-muted mb-3">Cuando quieras visitar una propiedad, podrás agendar la visita desde su detalle.</p>
+                <h2 class="h5 fw-bold">Todav&#237;a no tienes citas</h2>
+                <p class="text-muted mb-3">Cuando quieras visitar una propiedad, podr&#225;s agendar la visita desde su detalle.</p>
                 <a href="<%= request.getContextPath() %>/index.jsp" class="btn btn-primary">Explorar propiedades</a>
             </div>
         <% } else { %>
@@ -59,9 +67,9 @@
                                 <div><span>Hora</span><strong><%= String.format("%02d:%02d", fechaHora.toLocalDateTime().getHour(), fechaHora.toLocalDateTime().getMinute()) %></strong></div>
                             </div>
                             <div class="d-flex gap-2">
-                                <a href="<%= request.getContextPath() %>/propiedad?id=<%= cita.get("idPropiedad") %>" class="btn btn-outline-primary btn-sm flex-grow-1">Ver propiedad</a>
+                                <a href="<%= request.getContextPath() %>/acciones/detalle-propiedad.jsp?id=<%= cita.get("idPropiedad") %>" class="btn btn-outline-primary btn-sm flex-grow-1">Ver propiedad</a>
                                 <% if ("PENDIENTE".equals(estado) || "CONFIRMADA".equals(estado)) { %>
-                                    <form method="post" action="<%= request.getContextPath() %>/citas" onsubmit="return confirm('¿Deseas cancelar esta cita?');">
+                                    <form method="post" action="<%= request.getContextPath() %>/acciones/citas.jsp" onsubmit="return confirm('&#191;Deseas cancelar esta cita?');">
                                         <input type="hidden" name="accion" value="cancelar">
                                         <input type="hidden" name="idCita" value="<%= cita.get("id") %>">
                                         <button type="submit" class="btn btn-outline-danger btn-sm">Cancelar</button>

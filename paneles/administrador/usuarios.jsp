@@ -1,6 +1,14 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ include file="../../WEB-INF/jspf/seguridad.jspf" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
+<%
+    if (!tieneRol(session, "ADMINISTRADOR")) {
+        response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
+        return;
+    }
+%>
+
 <%
     response.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
@@ -20,7 +28,7 @@
     <div class="container app-container">
         <div class="page-header d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3">
             <div>
-                <div class="eyebrow">Administración</div>
+                <div class="eyebrow">Administraci&#243;n</div>
                 <h1 class="page-title">Usuarios y roles</h1>
                 <p class="page-subtitle">Consulta las cuentas, cambia su estado y asigna roles del sistema.</p>
             </div>
@@ -34,9 +42,9 @@
         <% } else if ("propio".equals(request.getParameter("error"))) { %>
             <div class="alert alert-warning">No puedes cambiar el estado de tu propia cuenta.</div>
         <% } else if ("rol".equals(request.getParameter("error"))) { %>
-            <div class="alert alert-warning">Ese usuario ya tiene ese rol o los datos no son válidos.</div>
+            <div class="alert alert-warning">Ese usuario ya tiene ese rol o los datos no son v&#225;lidos.</div>
         <% } else if ("bd".equals(request.getParameter("error"))) { %>
-            <div class="alert alert-danger">No se pudo actualizar la base de datos.</div>
+            <div class="alert alert-danger">No se pudo guardar el cambio. Intenta nuevamente.</div>
         <% } %>
 
         <div class="table-card">
@@ -74,7 +82,7 @@
                                 </td>
                                 <td><%= usuario.get("fecha") %></td>
                                 <td>
-                                    <form method="post" action="<%= request.getContextPath() %>/administrador/usuarios" class="d-flex gap-1">
+                                    <form method="post" action="<%= request.getContextPath() %>/acciones/administrador-usuarios.jsp" class="d-flex gap-1">
                                         <input type="hidden" name="accion" value="estado">
                                         <input type="hidden" name="idUsuario" value="<%= usuario.get("id") %>">
                                         <select name="estado" class="form-select form-select-sm" style="min-width:120px">
@@ -86,7 +94,7 @@
                                     </form>
                                 </td>
                                 <td>
-                                    <form method="post" action="<%= request.getContextPath() %>/administrador/usuarios" class="d-flex gap-1">
+                                    <form method="post" action="<%= request.getContextPath() %>/acciones/administrador-usuarios.jsp" class="d-flex gap-1">
                                         <input type="hidden" name="accion" value="rol">
                                         <input type="hidden" name="idUsuario" value="<%= usuario.get("id") %>">
                                         <select name="idRol" class="form-select form-select-sm" required>
@@ -108,7 +116,7 @@
 
         <div class="info-panel mt-4">
             <h2>Control de acceso</h2>
-            <p class="mb-0">Los cambios realizados aquí se guardan en la base de datos. El filtro del servidor continúa controlando qué panel puede abrir cada rol.</p>
+            <p class="mb-0">Los cambios realizados aqu&#237; se aplican a las cuentas y sus permisos de acceso.</p>
         </div>
     </div>
 </main>

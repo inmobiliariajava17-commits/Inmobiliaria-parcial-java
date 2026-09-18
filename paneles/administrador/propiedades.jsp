@@ -1,7 +1,15 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ include file="../../WEB-INF/jspf/seguridad.jspf" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.text.NumberFormat, java.util.Locale" %>
+<%
+    if (!tieneRol(session, "ADMINISTRADOR")) {
+        response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
+        return;
+    }
+%>
+
 <%
     response.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
@@ -17,7 +25,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Propiedades - Administrador</title>
+    <title>Propiedades | Administraci&#243;n</title>
 </head>
 <body>
 <%@ include file="../../WEB-INF/jspf/cabecera.jspf" %>
@@ -25,7 +33,7 @@
     <div class="container app-container">
         <div class="page-header d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3">
             <div>
-                <div class="eyebrow">Administración</div>
+                <div class="eyebrow">Administraci&#243;n</div>
                 <h1 class="page-title">Propiedades</h1>
                 <p class="page-subtitle">Consulta las propiedades publicadas por las inmobiliarias y controla su estado.</p>
             </div>
@@ -35,15 +43,15 @@
         <% if ("estado".equals(request.getParameter("mensaje"))) { %>
             <div class="alert alert-success">Estado de la propiedad actualizado correctamente.</div>
         <% } else if ("estado".equals(request.getParameter("error"))) { %>
-            <div class="alert alert-warning">El estado seleccionado no es válido.</div>
+            <div class="alert alert-warning">El estado seleccionado no es v&#225;lido.</div>
         <% } else if ("noEncontrada".equals(request.getParameter("error"))) { %>
-            <div class="alert alert-warning">No se encontró la propiedad.</div>
+            <div class="alert alert-warning">No se encontr&#243; la propiedad.</div>
         <% } else if ("bd".equals(request.getParameter("error"))) { %>
-            <div class="alert alert-danger">No se pudo actualizar la base de datos.</div>
+            <div class="alert alert-danger">No se pudo guardar el cambio. Intenta nuevamente.</div>
         <% } %>
 
         <div class="surface-card mb-4">
-            <form method="get" action="<%= request.getContextPath() %>/administrador/propiedades">
+            <form method="get" action="<%= request.getContextPath() %>/acciones/administrador-propiedades.jsp">
                 <div class="row g-3 align-items-end">
                     <div class="col-md-4">
                         <label class="form-label">Ciudad</label>
@@ -95,7 +103,7 @@
                             <th>ID</th>
                             <th>Propiedad</th>
                             <th>Inmobiliaria</th>
-                            <th>Ubicación</th>
+                            <th>Ubicaci&#243;n</th>
                             <th>Precio</th>
                             <th>Estado</th>
                             <th>Actualizar</th>
@@ -111,7 +119,7 @@
                                 <td>$ <%= formatoPrecio.format(p.get("precio")) %></td>
                                 <td><span class="badge text-bg-light border"><%= p.get("estado") %></span></td>
                                 <td>
-                                    <form method="post" action="<%= request.getContextPath() %>/administrador/propiedades" class="d-flex gap-1">
+                                    <form method="post" action="<%= request.getContextPath() %>/acciones/administrador-propiedades.jsp" class="d-flex gap-1">
                                         <input type="hidden" name="accion" value="estado">
                                         <input type="hidden" name="idPropiedad" value="<%= p.get("id") %>">
                                         <select name="estado" class="form-select form-select-sm" style="min-width:120px">
@@ -133,7 +141,7 @@
 
         <div class="info-panel mt-4">
             <h2>Control administrativo</h2>
-            <p class="mb-0">El administrador puede consultar propiedades de todas las inmobiliarias y actualizar su estado. Cada cambio queda registrado en la tabla de auditoría.</p>
+            <p class="mb-0">El administrador puede consultar propiedades de todas las inmobiliarias y actualizar su estado. Cada cambio queda registrado en la tabla de auditor&#237;a.</p>
         </div>
     </div>
 </main>

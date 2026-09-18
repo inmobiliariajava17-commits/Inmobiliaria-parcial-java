@@ -1,6 +1,14 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ include file="../../WEB-INF/jspf/seguridad.jspf" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
+<%
+    if (!tieneRol(session, "CLIENTE")) {
+        response.sendRedirect(request.getContextPath() + "/acceso-denegado.jsp");
+        return;
+    }
+%>
+
 <%
     response.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
@@ -25,9 +33,9 @@
             <div>
                 <div class="eyebrow">Solicitud #<%= idSolicitud %></div>
                 <h1 class="page-title">Documentos</h1>
-                <p class="page-subtitle">Revisa la documentación de tu solicitud y envía el trámite cuando todos los documentos requeridos estén guardados.</p>
+                <p class="page-subtitle">Revisa la documentaci&#243;n de tu solicitud y env&#237;a el tr&#225;mite cuando todos los documentos requeridos est&#233;n guardados.</p>
             </div>
-            <a href="<%= request.getContextPath() %>/solicitudes" class="btn btn-outline-primary align-self-start">Volver a solicitudes</a>
+            <a href="<%= request.getContextPath() %>/acciones/solicitudes.jsp" class="btn btn-outline-primary align-self-start">Volver a solicitudes</a>
         </div>
 
         <% if ("subido".equals(request.getParameter("mensaje"))) { %>
@@ -39,9 +47,9 @@
         <% } else if ("formato".equals(request.getParameter("error"))) { %>
             <div class="alert alert-danger">Solo se permiten archivos PDF, JPG, JPEG o PNG.</div>
         <% } else if ("incompletos".equals(request.getParameter("error"))) { %>
-            <div class="alert alert-warning">Faltan documentos requeridos. Revísalos antes de enviar la solicitud.</div>
+            <div class="alert alert-warning">Faltan documentos requeridos. Rev&#237;salos antes de enviar la solicitud.</div>
         <% } else if ("no-disponible".equals(request.getParameter("error"))) { %>
-            <div class="alert alert-danger">La propiedad ya no está disponible para continuar con la solicitud.</div>
+            <div class="alert alert-danger">La propiedad ya no est&#225; disponible para continuar con la solicitud.</div>
         <% } else if (request.getAttribute("error") != null || "guardar-documento".equals(request.getParameter("error"))) { %>
             <div class="alert alert-danger">No se pudo procesar el documento.</div>
         <% } %>
@@ -49,19 +57,19 @@
         <% if ("BORRADOR".equals(estadoSolicitud)) { %>
             <div class="surface-card mb-4">
                 <h2 class="h5 fw-bold mb-2">Solicitud en borrador</h2>
-                <p class="text-muted">Los documentos ya están guardados. Cuando todos los requisitos estén completos puedes enviar la solicitud para revisión.</p>
-                <form method="post" action="<%= request.getContextPath() %>/solicitudes">
+                <p class="text-muted">Los documentos ya est&#225;n guardados. Cuando todos los requisitos est&#233;n completos puedes enviar la solicitud para revisi&#243;n.</p>
+                <form method="post" action="<%= request.getContextPath() %>/acciones/solicitudes.jsp">
                     <input type="hidden" name="accion" value="enviar">
                     <input type="hidden" name="idSolicitud" value="<%= idSolicitud %>">
-                    <button type="submit" class="btn btn-primary">Enviar solicitud a revisión</button>
+                    <button type="submit" class="btn btn-primary">Enviar solicitud a revisi&#243;n</button>
                 </form>
             </div>
         <% } %>
 
         <div class="surface-card mb-4">
             <h2 class="h5 fw-bold mb-2">Cargar documento adicional</h2>
-            <p class="text-muted">Puedes agregar documentación adicional. Los documentos requeridos ya guardados aparecen en la lista inferior.</p>
-            <form method="post" action="<%= request.getContextPath() %>/documentos-solicitud" enctype="multipart/form-data" class="row g-3 align-items-end">
+            <p class="text-muted">Puedes agregar documentaci&#243;n adicional. Los documentos requeridos ya guardados aparecen en la lista inferior.</p>
+            <form method="post" action="<%= request.getContextPath() %>/acciones/documentos-solicitud.jsp" enctype="multipart/form-data" class="row g-3 align-items-end">
                 <input type="hidden" name="accion" value="subir">
                 <input type="hidden" name="idSolicitud" value="<%= idSolicitud %>">
                 <div class="col-md-8">
@@ -78,7 +86,7 @@
             <div class="empty-state surface-card">
                 <span class="material-symbols-outlined">folder_open</span>
                 <h2 class="h5 fw-bold mt-2">No hay documentos cargados</h2>
-                <p class="text-muted mb-0">Los documentos que enviaste al crear la solicitud aparecerán aquí. También puedes agregar documentos adicionales si la inmobiliaria los solicita.</p>
+                <p class="text-muted mb-0">Los documentos que enviaste al crear la solicitud aparecer&#225;n aqu&#237;. Tambi&#233;n puedes agregar documentos adicionales si la inmobiliaria los solicita.</p>
             </div>
         <% } else { %>
             <div class="row g-4">
@@ -93,7 +101,7 @@
                             <p class="small text-muted mb-3">Cargado: <%= documento.get("fecha") %></p>
                             <div class="mt-auto d-flex gap-2">
                                 <a href="<%= documento.get("url") %>" target="_blank" rel="noopener" class="btn btn-outline-primary flex-grow-1">Ver documento</a>
-                                <form method="post" action="<%= request.getContextPath() %>/documentos-solicitud">
+                                <form method="post" action="<%= request.getContextPath() %>/acciones/documentos-solicitud.jsp">
                                     <input type="hidden" name="accion" value="eliminar">
                                     <input type="hidden" name="idSolicitud" value="<%= idSolicitud %>">
                                     <input type="hidden" name="idDocumento" value="<%= documento.get("id") %>">
